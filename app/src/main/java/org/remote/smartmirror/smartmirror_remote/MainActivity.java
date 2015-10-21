@@ -8,6 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +23,32 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Inserting into ListView
+
+        //Get ListView from content_main.xml
+        ListView remoteView = (ListView) findViewById(R.id.remote_list);
+
+        //Add dummy info to array
+        String[] applications = {
+                new String("Weather"),
+                new String("News"),
+                new String("Calendar")
+        };
+
+        //Initialize ArrayAdapter with Array of Strings above
+        ArrayAdapter<String> rListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, applications);
+
+        //Set the adapter to the ListView
+        remoteView.setAdapter(rListAdapter);
+
+        //Clicking functions that display name of item on bottom of screen as a toast
+        remoteView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String appItem = ((TextView)view).getText().toString();
+                Toast.makeText(getBaseContext(), appItem, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
