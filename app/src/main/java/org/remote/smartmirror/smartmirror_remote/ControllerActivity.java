@@ -22,7 +22,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
 
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
-    private BroadcastReceiver mReceiver;
+    private BroadcastReceiver mWifiReceiver;
     private IntentFilter mIntentFilter;
     private Collection<WifiP2pDevice> mDeviceList;
 
@@ -45,7 +45,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         // Initialize Wifi
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
+        mWifiReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
 
         // Initialize intent filter
         mIntentFilter = new IntentFilter();
@@ -54,6 +54,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
+        // Now that the manager is initialized, see if there are any peers
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
@@ -93,17 +94,17 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(mReceiver, mIntentFilter);
+        registerReceiver(mWifiReceiver, mIntentFilter);
     }
 
     /* unregister the broadcast receiver */
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(mReceiver);
+        unregisterReceiver(mWifiReceiver);
     }
 
-    // callback when peer list changes
+    // Interface passes back a device list when the peer list changes, or discovery is successful
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peers) {
         mDeviceList = peers.getDeviceList();
