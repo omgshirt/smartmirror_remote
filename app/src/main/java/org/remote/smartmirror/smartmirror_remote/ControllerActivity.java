@@ -3,22 +3,28 @@ package org.remote.smartmirror.smartmirror_remote;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class ControllerActivity extends AppCompatActivity {
+import java.util.Collection;
 
-    WifiP2pManager mManager;
-    WifiP2pManager.Channel mChannel;
-    BroadcastReceiver mReceiver;
-    IntentFilter mIntentFilter;
+public class ControllerActivity extends AppCompatActivity implements WifiP2pManager.PeerListListener{
+
+    private WifiP2pManager mManager;
+    private WifiP2pManager.Channel mChannel;
+    private BroadcastReceiver mReceiver;
+    private IntentFilter mIntentFilter;
+    private Collection<WifiP2pDevice> mDeviceList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,18 @@ public class ControllerActivity extends AppCompatActivity {
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+        mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Log.i("wifi", "discovery successful");
+            }
+
+            @Override
+            public void onFailure(int reasonCode) {
+                Log.i("wifi", "discovery failed");
+            }
+        });
     }
 
     @Override
@@ -83,5 +101,12 @@ public class ControllerActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(mReceiver);
+    }
+
+    // callback when peer list changes
+    @Override
+    public void onPeersAvailable(WifiP2pDeviceList peers) {
+        mDeviceList = peers.getDeviceList();
+        Log.i("peers", mDeviceList.toString());
     }
 }
