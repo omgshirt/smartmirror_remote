@@ -10,15 +10,15 @@ import android.widget.Toast;
 /**
  * A BroadcastReceiver that notifies of important Wi-Fi p2p events.
  */
-public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
+public class WiFiDirectBroadcastRec extends BroadcastReceiver {
 
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
     private ControllerActivity mActivity;
     private WifiP2pManager.PeerListListener mPeerListListener;
 
-    public WiFiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel,
-                                       ControllerActivity activity) {
+    public WiFiDirectBroadcastRec(WifiP2pManager manager, WifiP2pManager.Channel channel,
+                                  ControllerActivity activity) {
         super();
         this.mManager = manager;
         this.mChannel = channel;
@@ -47,6 +47,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             // request available peers from the wifi p2p manager. This is an
             // asynchronous call and the calling activity is notified with a
             // callback on PeerListListener.onPeersAvailable()
+
             if (mManager != null) {
                 mManager.requestPeers(mChannel, mPeerListListener);
             }
