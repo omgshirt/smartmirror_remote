@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -53,6 +54,7 @@ public class WiFiDirectBroadcastRec extends BroadcastReceiver {
             }
             Log.i("Wifi","Wifi p2p peers have changed");
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
+
             // Respond to new connection or disconnections
             Log.i("Wifi","Wifi p2p connections changed");
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {

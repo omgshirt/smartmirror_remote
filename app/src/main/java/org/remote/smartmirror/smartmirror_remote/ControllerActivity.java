@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 public class ControllerActivity extends AppCompatActivity implements WifiP2pManager.PeerListListener{
 
     private FloatingActionButton fabShowPeers;
+    private TextView txtConnectionMessage;
 
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
@@ -62,6 +64,8 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         setContentView(R.layout.controller_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        txtConnectionMessage = (TextView) findViewById(R.id.connection_message);
 
         layPeerLayout = (LinearLayout) findViewById(R.id.peer_layout);
 
@@ -94,6 +98,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this, getMainLooper(), null);
         mWifiReceiver = new WiFiDirectBroadcastRec(mManager, mChannel, this);
+
 
         // Initialize intent filter
         mIntentFilter = new IntentFilter();
@@ -168,6 +173,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
 
     // calls the P2pManager to refresh peer list
     private void discoverPeers() {
+        txtConnectionMessage.setText(R.string.scanning);
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
@@ -191,9 +197,10 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
             mPeerList.add(device.deviceName);
         }
 
+        txtConnectionMessage.setText("Available Devices");
         // update the peer list adapter
         ( (BaseAdapter)lstPeerList.getAdapter() ).notifyDataSetChanged();
-        //Log.i("peers", mPeerList.toString());
+        Log.i("peers", mPeerList.toString());
     }
 
     // connect to the selected Wifi device
@@ -201,7 +208,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         //obtain a peer from the WifiP2pDeviceList
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = device.deviceAddress;
-        //config.groupOwnerIntent = 0;              // don't make this remote the owner
+        config.groupOwnerIntent = 0;              // don't make this remote the owner
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
 
             @Override
@@ -213,7 +220,6 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
                 // check if connection is complete
                 ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-                Log.i("networkInfo", networkInfo.toString());
                 if (networkInfo.isConnected()) {
                     mManager.requestConnectionInfo(mChannel, new WifiP2pManager.ConnectionInfoListener() {
                         @Override
@@ -221,7 +227,6 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
                             // get the group owner's IP
                             try {
                             mOwnerIP = info.groupOwnerAddress.getHostAddress();
-                            Log.i("Owner IP", mOwnerIP);
                             } catch(Exception e) {
                                 Log.e("WifiP2pInfo", "error");
                                 e.printStackTrace();
@@ -241,20 +246,25 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
     }
 
     private void sendCommandToMirror(String command) {
-        new SendCommandTask().execute(command);
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo.isConnected()) {
+            new SendCommandTask().execute(command);
+        }
     }
 
+    // this will create a background task, connect to the server and attempt to send the command string
     private class SendCommandTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... commands) {
-
             Socket socket = new Socket();
             try {
                 /**
                  * Create a client socket with the host,
                  * port, and timeout information.
                  */
+
                 socket.bind(null);
                 socket.connect((new InetSocketAddress(mOwnerIP, PORT)), SOCKET_TIMEOUT);
 
@@ -263,7 +273,6 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
                 oos.writeObject(commands[0]);
                 oos.close();
                 os.close();
-                Log.i("SendCommandTask", commands[0]);
 
             } catch (IOException e) {
                 e.printStackTrace();
