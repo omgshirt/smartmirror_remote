@@ -40,7 +40,6 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
 
     private FloatingActionButton fabShowPeers;
     private TextView txtConnectionMessage;
-    private TextView txtDisconnect;
 
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
@@ -110,14 +109,6 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
-        txtDisconnect = (TextView) findViewById(R.id.disconnect);
-        txtDisconnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                disconnect();
-            }
-        });
-
         // Now that the manager is initialized, see if there are any peers
         fabShowPeers = (FloatingActionButton) findViewById(R.id.show_peers);
         fabShowPeers.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +122,6 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
                 }
             }
         });
-        //discoverPeers();
     }
 
     // show PeerList, hide Actions
@@ -223,7 +213,6 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         } else if (info.groupFormed) {
             Log.i("Wifi", "not group owner");
         }
-
     }
 
     public void disconnect() {
