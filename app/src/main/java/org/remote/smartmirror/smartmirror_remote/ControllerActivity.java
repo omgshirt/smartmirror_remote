@@ -30,14 +30,17 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ControllerActivity extends AppCompatActivity implements WifiP2pManager.PeerListListener{
+public class ControllerActivity extends AppCompatActivity implements WifiP2pManager.PeerListListener,
+    WifiP2pManager.ConnectionInfoListener {
 
     private FloatingActionButton fabShowPeers;
     private TextView txtConnectionMessage;
+    private TextView txtDisconnect;
 
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
@@ -106,6 +109,14 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+        txtDisconnect = (TextView) findViewById(R.id.disconnect);
+        txtDisconnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disconnect();
+            }
+        });
 
         // Now that the manager is initialized, see if there are any peers
         fabShowPeers = (FloatingActionButton) findViewById(R.id.show_peers);
@@ -203,11 +214,38 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         Log.i("peers", mPeerList.toString());
     }
 
+    @Override
+    public void onConnectionInfoAvailable(final WifiP2pInfo info) {
+        mOwnerIP = info.groupOwnerAddress.getHostAddress();
+
+        if (info.groupFormed && info.isGroupOwner) {
+            Log.i("Wifi", " is group owner");
+        } else if (info.groupFormed) {
+            Log.i("Wifi", "not group owner");
+        }
+
+    }
+
+    public void disconnect() {
+        mManager.removeGroup(mChannel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(ControllerActivity.this, "Disconnected", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int reason) {
+                Log.d("Wifi", "Disconnect failure. Reason:" + reason);
+            }
+        });
+    }
+
     // connect to the selected Wifi device
     public void connectToPeer(WifiP2pDevice device) {
         //obtain a peer from the WifiP2pDeviceList
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = device.deviceAddress;
+        Log.d("Wifi", "address:"  + config.deviceAddress);
         config.groupOwnerIntent = 0;              // don't make this remote the owner
         mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
 
@@ -218,6 +256,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
                 Toast.makeText(ControllerActivity.this, "Connected!", Toast.LENGTH_SHORT).show();
                 showActions();
                 // check if connection is complete
+                /*
                 ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = cm.getActiveNetworkInfo();
                 if (networkInfo.isConnected()) {
@@ -233,7 +272,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
                             }
                         }
                     });
-                }
+                }*/
             }
 
             @Override
@@ -248,7 +287,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
     private void sendCommandToMirror(String command) {
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        if (networkInfo.isConnected()) {
+        if (networkInfo.isConnected() && mOwnerIP != null) {
             new SendCommandTask().execute(command);
         }
     }
