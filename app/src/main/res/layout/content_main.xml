@@ -13,19 +13,36 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <!--
-    <ToggleButton
+
+    <LinearLayout
+        android:id="@+id/module_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textOff="OFF"
-        android:textOn="ON" />
-    -->
+        android:orientation="vertical"
+        android:visibility="visible">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/wake_button"
+                android:layout_weight=".5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wake" />
+            <Button
+                android:id="@+id/sleep_button"
+                android:layout_weight=".5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sleep" />
+        </LinearLayout>
 
-    <ListView
-        android:id="@+id/mirror_action_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
+        <ListView
+            android:id="@+id/mirror_action_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ListView>
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/peer_layout"
         android:layout_width="match_parent"

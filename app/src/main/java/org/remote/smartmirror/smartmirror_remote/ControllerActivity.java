@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,7 +31,6 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -49,12 +49,10 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
     private ListView lstActionList;
     private ListView lstPeerList;
     private LinearLayout layPeerLayout;
-    private String[] mActionList = {"Calendar",
-                                    "Light",
-                                    "News",
-                                    "Sports",
-                                    "Weather",
-                                    "Settings"};
+    private LinearLayout layModuleLayout;
+    private String[] mActionList;
+    private Button btnSleep;
+    private Button btnWake;
 
     private ArrayList<String> mPeerList;
     private final int PORT = 8888;           // port to communicate on
@@ -69,7 +67,25 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
 
         txtConnectionMessage = (TextView) findViewById(R.id.connection_message);
 
+        mActionList = getResources().getStringArray(R.array.module_list);
         layPeerLayout = (LinearLayout) findViewById(R.id.peer_layout);
+        layModuleLayout = (LinearLayout) findViewById(R.id.module_layout);
+
+        // set up sleep and wake buttons
+        btnSleep = (Button) findViewById(R.id.sleep_button);
+        btnWake = (Button) findViewById(R.id.wake_button);
+        btnSleep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendCommandToMirror(getResources().getString(R.string.sleep));
+            }
+        });
+        btnWake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendCommandToMirror(getResources().getString(R.string.wake));
+            }
+        });
 
         // initialize ActionList
         ArrayAdapter<String> actionAdapter = new ArrayAdapter<>(this,
@@ -101,7 +117,6 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         mChannel = mManager.initialize(this, getMainLooper(), null);
         mWifiReceiver = new WiFiDirectBroadcastRec(mManager, mChannel, this);
 
-
         // Initialize intent filter
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
@@ -118,7 +133,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
                     showPeers();
                     discoverPeers();
                 } else {
-                    showActions();
+                    showModules();
                 }
             }
         });
@@ -127,13 +142,13 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
     // show PeerList, hide Actions
     public void showPeers(){
         layPeerLayout.setVisibility(View.VISIBLE);
-        lstActionList.setVisibility(View.GONE);
+        layModuleLayout.setVisibility(View.GONE);
     }
 
     // show Actions, hide PeerList
-    public void showActions() {
+    public void showModules() {
         layPeerLayout.setVisibility(View.GONE);
-        lstActionList.setVisibility(View.VISIBLE);
+        layModuleLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -243,7 +258,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
                 //success logic
                 Log.i("connectToPeer", "connection successful");
                 Toast.makeText(ControllerActivity.this, "Connected!", Toast.LENGTH_SHORT).show();
-                showActions();
+                showModules();
                 // check if connection is complete
                 /*
                 ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
