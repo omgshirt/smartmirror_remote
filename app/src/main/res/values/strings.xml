@@ -5,4 +5,7 @@
     <string name="scanning">Scanning for devices...</string>
     <string name="sleep">Sleep</string>
     <string name="wake">Wake</string>
+    <string name="connected">Connected</string>
+    <string name="wifi_connected">Wifi Connected</string>
+    <string name="not_responding">Mirror not responding</string>
 </resources>

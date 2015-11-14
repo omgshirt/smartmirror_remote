@@ -64,6 +64,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
     public static final String TITLE = "SmartRemote";
     public static final String TITLE_CONNECTED = "SmartRemote - Connected";
     public static final String TITLE_DISCONNECTED = "SmartRemote - Disconnected";
+    public static final String TITLE_NOT_RESPONDING = "SmartRemote - Not Responding";
 
     private final int PORT = 8888;           // port to communicate on
     private String mOwnerIP;                   // group owner's IP
@@ -218,7 +219,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         mWifiManager.discoverPeers(mWifiChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                Log.i("discoverPeers", "successful");
+                //Log.i("discoverPeers", "successful");
             }
 
             @Override
@@ -249,9 +250,11 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         mOwnerIP = info.groupOwnerAddress.getHostAddress();
 
         if (info.groupFormed && info.isGroupOwner) {
-            Log.i("Wifi", " is group owner");
+            //Log.i("Wifi", " is group owner");
         } else if (info.groupFormed) {
-            Log.i("Wifi", "not group owner");
+            //Log.i("Wifi", "not group owner");
+            Log.i("Wifi", "testing connection");
+            sendCommandToMirror("test");
         }
     }
 
@@ -306,9 +309,11 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
             @Override
             public void onSuccess() {
                 //success logic
-                Log.i("connectToPeer", "connection successful");
-                Toast.makeText(ControllerActivity.this, "Connected!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ControllerActivity.this, getResources().getString(R.string.wifi_connected),
+                        Toast.LENGTH_SHORT).show();
                 showModuleList();
+                Log.i("Wifi", "testing connection");
+                sendCommandToMirror("test");
                 // check if connection is complete
                 /*
                 ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -333,13 +338,13 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
             public void onFailure(int reason) {
                 //failure logic
                 Toast.makeText(ControllerActivity.this, "Connection Failed", Toast.LENGTH_SHORT).show();
-                Log.i("connectToPeer", "connection failed");
+                Log.i("connectToPeer", "connection failed reason: " + reason);
                 getActionBar().setTitle(TITLE);
             }
         });
     }
 
-    private void sendCommandToMirror(String command) {
+    public void sendCommandToMirror(String command) {
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         if (networkInfo.isConnected() && mOwnerIP != null) {
@@ -349,6 +354,8 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
 
     // this will create a background task, connect to the server and attempt to send the command string
     private class SendCommandTask extends AsyncTask<String, Void, String> {
+
+        String titleMsg;
 
         @Override
         protected String doInBackground(String... commands) {
@@ -361,21 +368,22 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
 
                 socket.bind(null);
                 socket.connect((new InetSocketAddress(mOwnerIP, PORT)), SOCKET_TIMEOUT);
-
                 OutputStream os = socket.getOutputStream();
                 ObjectOutputStream oos = new ObjectOutputStream(os);
                 oos.writeObject(commands[0]);
                 oos.close();
                 os.close();
-
+                titleMsg = TITLE_CONNECTED;
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("Socket", e.getMessage());
+                titleMsg = TITLE_NOT_RESPONDING;
             }
 
             /**
              * Clean up any open sockets when done
              * transferring or if an exception occurred.
-             */ finally {
+             */
+            finally {
                 if (socket != null) {
                     if (socket.isConnected()) {
                         try {
@@ -387,6 +395,15 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
                 }
             }
             return commands[0];
+        }
+
+        protected void onPostExecute(String command) {
+            getSupportActionBar().setTitle(titleMsg);
+            if (titleMsg.equals(TITLE_NOT_RESPONDING))
+            {
+                Toast.makeText(ControllerActivity.this,
+                        getResources().getString(R.string.not_responding), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

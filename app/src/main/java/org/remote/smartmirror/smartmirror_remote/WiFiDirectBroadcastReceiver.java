@@ -61,11 +61,6 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
             if (networkInfo.isConnected()) {
                 mManager.requestConnectionInfo(mChannel, mActivity);
-                try {
-                    mActivity.getSupportActionBar().setTitle(ControllerActivity.TITLE_CONNECTED);
-                } catch (Exception e) {
-                  e.printStackTrace();
-                }
             } else {
                 try {
                     mActivity.getSupportActionBar().setTitle(ControllerActivity.TITLE_DISCONNECTED);
