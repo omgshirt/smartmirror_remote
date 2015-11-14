@@ -5,11 +5,13 @@
         <item>Calendar</item>
         <item>Camera</item>
         <item>Facebook</item>
+        <item>Help</item>
         <item>Light</item>
         <item>News</item>
         <item>Music</item>
         <item>Settings</item>
         <item>Traffic</item>
+        <item>Twitter</item>
         <item>Weather</item>
     </string-array>
 

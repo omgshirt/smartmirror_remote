@@ -34,6 +34,10 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class ControllerActivity extends AppCompatActivity implements WifiP2pManager.PeerListListener,
     WifiP2pManager.ConnectionInfoListener {
@@ -41,11 +45,14 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
     private FloatingActionButton fabShowPeers;
     private TextView txtConnectionMessage;
 
-    private WifiP2pManager mManager;
-    private WifiP2pManager.Channel mChannel;
+    private WifiP2pManager mWifiManager;
+    private WifiP2pManager.Channel mWifiChannel;
     private BroadcastReceiver mWifiReceiver;
-    private IntentFilter mIntentFilter;
-    private ArrayList<WifiP2pDevice> mDeviceList;
+    private IntentFilter mWifiIntentFilter;
+    private ArrayList<WifiP2pDevice> mWifiDeviceList;
+    private ScheduledFuture<?> wifiHeartbeat;
+    private ArrayList<String> mPeerList;
+
     private ListView lstActionList;
     private ListView lstPeerList;
     private LinearLayout layPeerLayout;
@@ -54,10 +61,14 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
     private Button btnSleep;
     private Button btnWake;
 
-    private ArrayList<String> mPeerList;
+    public static final String TITLE = "SmartRemote";
+    public static final String TITLE_CONNECTED = "SmartRemote - Connected";
+    public static final String TITLE_DISCONNECTED = "SmartRemote - Disconnected";
+
     private final int PORT = 8888;           // port to communicate on
     private String mOwnerIP;                   // group owner's IP
     private final int SOCKET_TIMEOUT = 500;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,21 +119,21 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         lstPeerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                connectToPeer(mDeviceList.get(position));
+                connectToPeer(mWifiDeviceList.get(position));
             }
         });
 
         // Initialize Wifi
-        mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        mChannel = mManager.initialize(this, getMainLooper(), null);
-        mWifiReceiver = new WiFiDirectBroadcastRec(mManager, mChannel, this);
+        mWifiManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        mWifiChannel = mWifiManager.initialize(this, getMainLooper(), null);
+        mWifiReceiver = new WiFiDirectBroadcastReceiver(mWifiManager, mWifiChannel, this);
 
         // Initialize intent filter
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-        mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+        mWifiIntentFilter = new IntentFilter();
+        mWifiIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        mWifiIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        mWifiIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        mWifiIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         // Now that the manager is initialized, see if there are any peers
         fabShowPeers = (FloatingActionButton) findViewById(R.id.show_peers);
@@ -133,7 +144,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
                     showPeers();
                     discoverPeers();
                 } else {
-                    showModules();
+                    showModuleList();
                 }
             }
         });
@@ -146,7 +157,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
     }
 
     // show Actions, hide PeerList
-    public void showModules() {
+    public void showModuleList() {
         layPeerLayout.setVisibility(View.GONE);
         layModuleLayout.setVisibility(View.VISIBLE);
     }
@@ -173,24 +184,38 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         return super.onOptionsItemSelected(item);
     }
 
+    // --------------------------- Lifecycle ------------------------------
+
     /* register the broadcast receiver with the intent values to be matched */
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(mWifiReceiver, mIntentFilter);
+        stopWifiHeartbeat();
+        registerReceiver(mWifiReceiver, mWifiIntentFilter);
     }
 
     /* unregister the broadcast receiver */
     @Override
     protected void onPause() {
         super.onPause();
+        startWifiHeartbeat();
         unregisterReceiver(mWifiReceiver);
     }
+
+    @Override
+    protected void onDestroy() {
+        stopWifiHeartbeat();
+        wifiHeartbeat = null;
+        super.onDestroy();
+
+    }
+
+    // ------------------------------- WifiP2P ---------------------------------
 
     // calls the P2pManager to refresh peer list
     private void discoverPeers() {
         txtConnectionMessage.setText(R.string.scanning);
-        mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
+        mWifiManager.discoverPeers(mWifiChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 Log.i("discoverPeers", "successful");
@@ -207,9 +232,9 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
     @Override
     public void onPeersAvailable(WifiP2pDeviceList peers) {
         // Set device list and update the peer list
-        mDeviceList = new ArrayList<>(peers.getDeviceList());
+        mWifiDeviceList = new ArrayList<>(peers.getDeviceList());
         mPeerList.clear();
-        for(WifiP2pDevice device: mDeviceList) {
+        for(WifiP2pDevice device: mWifiDeviceList) {
             mPeerList.add(device.deviceName);
         }
 
@@ -230,8 +255,33 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         }
     }
 
+    // OnStop, start a thread that keeps the wifip2p connection alive by pinging every 60 seconds
+    private void startWifiHeartbeat() {
+        ScheduledThreadPoolExecutor scheduler = (ScheduledThreadPoolExecutor)
+                Executors.newScheduledThreadPool(1);
+
+        final Runnable heartbeatTask = new Runnable() {
+            @Override
+            public void run() {
+                discoverPeers();
+                Log.i("Wifi", "Heartbeat: discoverPeers()" );
+            }
+        };
+        wifiHeartbeat = scheduler.scheduleAtFixedRate(heartbeatTask, 60, 60,
+                TimeUnit.SECONDS);
+    }
+
+    // Stop the heartbeat thread
+    public void stopWifiHeartbeat() {
+        if (wifiHeartbeat != null) {
+            wifiHeartbeat.cancel(true);
+        }
+    }
+
+    // ---------------------------------- Connect and send command -----------------------------
+
     public void disconnect() {
-        mManager.removeGroup(mChannel, new WifiP2pManager.ActionListener() {
+        mWifiManager.removeGroup(mWifiChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 Toast.makeText(ControllerActivity.this, "Disconnected", Toast.LENGTH_LONG).show();
@@ -251,20 +301,20 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         config.deviceAddress = device.deviceAddress;
         Log.d("Wifi", "address:"  + config.deviceAddress);
         config.groupOwnerIntent = 0;              // don't make this remote the owner
-        mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
+        mWifiManager.connect(mWifiChannel, config, new WifiP2pManager.ActionListener() {
 
             @Override
             public void onSuccess() {
                 //success logic
                 Log.i("connectToPeer", "connection successful");
                 Toast.makeText(ControllerActivity.this, "Connected!", Toast.LENGTH_SHORT).show();
-                showModules();
+                showModuleList();
                 // check if connection is complete
                 /*
                 ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = cm.getActiveNetworkInfo();
                 if (networkInfo.isConnected()) {
-                    mManager.requestConnectionInfo(mChannel, new WifiP2pManager.ConnectionInfoListener() {
+                    mWifiManager.requestConnectionInfo(mWifiChannel, new WifiP2pManager.ConnectionInfoListener() {
                         @Override
                         public void onConnectionInfoAvailable(WifiP2pInfo info) {
                             // get the group owner's IP
@@ -284,6 +334,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
                 //failure logic
                 Toast.makeText(ControllerActivity.this, "Connection Failed", Toast.LENGTH_SHORT).show();
                 Log.i("connectToPeer", "connection failed");
+                getActionBar().setTitle(TITLE);
             }
         });
     }

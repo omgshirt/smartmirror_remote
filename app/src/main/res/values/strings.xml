@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SmartRemote</string>
     <string name="action_settings">Settings</string>
-    <string name="wifi_not_enabled">Wifi not enabled</string>
+    <string name="wifi_not_enabled">Wifi disabled</string>
     <string name="scanning">Scanning for devices...</string>
     <string name="sleep">Sleep</string>
     <string name="wake">Wake</string>

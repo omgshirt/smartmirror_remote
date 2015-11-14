@@ -12,15 +12,15 @@ import android.widget.Toast;
 /**
  * A BroadcastReceiver that notifies of important Wi-Fi p2p events.
  */
-public class WiFiDirectBroadcastRec extends BroadcastReceiver {
+public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
     private ControllerActivity mActivity;
     private WifiP2pManager.PeerListListener mPeerListListener;
 
-    public WiFiDirectBroadcastRec(WifiP2pManager manager, WifiP2pManager.Channel channel,
-                                  ControllerActivity activity) {
+    public WiFiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel,
+                                       ControllerActivity activity) {
         super();
         this.mManager = manager;
         this.mChannel = channel;
@@ -61,6 +61,18 @@ public class WiFiDirectBroadcastRec extends BroadcastReceiver {
             NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
             if (networkInfo.isConnected()) {
                 mManager.requestConnectionInfo(mChannel, mActivity);
+                try {
+                    mActivity.getSupportActionBar().setTitle(ControllerActivity.TITLE_CONNECTED);
+                } catch (Exception e) {
+                  e.printStackTrace();
+                }
+            } else {
+                try {
+                    mActivity.getSupportActionBar().setTitle(ControllerActivity.TITLE_DISCONNECTED);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
             Log.i("Wifi","Wifi p2p connections changed");
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
