@@ -312,10 +312,10 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
                 Toast.makeText(ControllerActivity.this, getResources().getString(R.string.wifi_connected),
                         Toast.LENGTH_SHORT).show();
                 showModuleList();
-                Log.i("Wifi", "testing connection");
-                sendCommandToMirror("test");
+                //Log.i("Wifi", "testing connection");
+                //sendCommandToMirror("test");
                 // check if connection is complete
-                /*
+                /* Get the group owner IP - not required
                 ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo networkInfo = cm.getActiveNetworkInfo();
                 if (networkInfo.isConnected()) {
