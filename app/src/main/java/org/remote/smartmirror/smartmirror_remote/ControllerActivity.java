@@ -107,7 +107,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         lstActionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sendCommandToMirror(mActionList[position]);
+                sendCommandToMirror(mActionList[position].toLowerCase());
             }
         });
 
@@ -374,6 +374,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
                 oos.close();
                 os.close();
                 titleMsg = TITLE_CONNECTED;
+                Log.i("Sent", commands[0]);
             } catch (IOException e) {
                 Log.e("Socket", e.getMessage());
                 titleMsg = TITLE_NOT_RESPONDING;
