@@ -89,13 +89,13 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         btnSleep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendCommandToMirror(getResources().getString(R.string.sleep));
+                sendCommandToMirror(getResources().getString(R.string.sleep).toLowerCase());
             }
         });
         btnWake.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendCommandToMirror(getResources().getString(R.string.wake));
+                sendCommandToMirror(getResources().getString(R.string.wake).toLowerCase());
             }
         });
 
@@ -253,8 +253,8 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
             //Log.i("Wifi", " is group owner");
         } else if (info.groupFormed) {
             //Log.i("Wifi", "not group owner");
-            Log.i("Wifi", "testing connection");
-            sendCommandToMirror("test");
+            //Log.i("Wifi", "testing connection");
+            //sendCommandToMirror("test");
         }
     }
 
