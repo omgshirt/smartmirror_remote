@@ -349,7 +349,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
     public void sendCommandToMirror(String command) {
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        if (networkInfo.isConnected() && mOwnerIP != null) {
+        if (networkInfo != null && networkInfo.isConnected() && mOwnerIP != null) {
             new SendCommandTask().execute(command);
         }
     }
