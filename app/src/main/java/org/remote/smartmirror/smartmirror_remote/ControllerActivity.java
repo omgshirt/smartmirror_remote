@@ -107,7 +107,9 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
         lstActionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sendCommandToMirror(mActionList[position].toLowerCase());
+                String command = mActionList[position].toLowerCase();
+                sendCommandToMirror(command);
+                Log.i("Action", command);
             }
         });
 
@@ -339,7 +341,7 @@ public class ControllerActivity extends AppCompatActivity implements WifiP2pMana
                 //failure logic
                 Toast.makeText(ControllerActivity.this, "Connection Failed", Toast.LENGTH_SHORT).show();
                 Log.i("connectToPeer", "connection failed reason: " + reason);
-                getActionBar().setTitle(TITLE);
+                getSupportActionBar().setTitle(TITLE);
             }
         });
     }
