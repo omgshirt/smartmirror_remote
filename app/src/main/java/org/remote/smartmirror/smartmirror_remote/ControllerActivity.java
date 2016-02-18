@@ -71,7 +71,7 @@ public class ControllerActivity extends AppCompatActivity {
         mRemoteConnection= new RemoteConnection(mUpdateHandler);
         mNsdHelper = new NsdHelper(this);
         mNsdHelper.initializeNsd();
-        registerService();
+        registerNsdService();
 
 
         txtConnectionMessage = (TextView) findViewById(R.id.connection_message);
@@ -105,7 +105,6 @@ public class ControllerActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String command = mActionList[position].toLowerCase();
                 sendCommandToMirror(command);
-                Log.i("Action", command);
             }
         });
 
@@ -245,7 +244,7 @@ public class ControllerActivity extends AppCompatActivity {
     }
 
     // call helper to register
-    public void registerService() {
+    public void registerNsdService() {
         // Register service
         if(mRemoteConnection.getLocalPort() > -1) {
             mNsdHelper.registerService(mRemoteConnection.getLocalPort());

@@ -128,6 +128,7 @@ public class NsdHelper {
     }
 
     public void registerService(int port) {
+        Log.i(ControllerActivity.TAG, "register service port :: " + port);
         NsdServiceInfo serviceInfo = new NsdServiceInfo();
         serviceInfo.setPort(port);
         serviceInfo.setServiceName(mServiceName);
