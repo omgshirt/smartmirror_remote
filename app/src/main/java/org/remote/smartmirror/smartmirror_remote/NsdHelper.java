@@ -32,7 +32,6 @@ public class NsdHelper {
     public void initializeNsd() {
         initializeDiscoveryListener();
         initializeRegistrationListener();
-
     }
 
     public void initializeDiscoveryListener() {

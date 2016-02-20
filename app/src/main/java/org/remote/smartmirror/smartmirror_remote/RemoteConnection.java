@@ -63,11 +63,13 @@ public class RemoteConnection {
     public synchronized void updateMessages(String msg, boolean local) {
         Log.e(TAG, "Updating message: " + msg);
 
+        /*
         if (local) {
             msg = "me: " + msg;
         } else {
             msg = "them: " + msg;
         }
+        */
 
         Bundle messageBundle = new Bundle();
         messageBundle.putString("msg", msg);
@@ -128,6 +130,8 @@ public class RemoteConnection {
                     mServerSocket = new ServerSocket(0);
                     setLocalPort(mServerSocket.getLocalPort());
 
+                    // send message that server has been created
+                    updateMessages(ControllerActivity.SERVER_STARTED, true);
                     while (!Thread.currentThread().isInterrupted()) {
                         Log.d(TAG, "ServerSocket Created, awaiting connection");
                         setSocket(mServerSocket.accept());

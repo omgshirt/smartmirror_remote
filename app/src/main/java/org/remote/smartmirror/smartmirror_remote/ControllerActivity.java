@@ -30,6 +30,8 @@ public class ControllerActivity extends AppCompatActivity {
 
     public static final String TAG = "Remote";
 
+    public static final String SERVER_STARTED = "server started";
+
     private FloatingActionButton FabConnectToServer;
     private TextView TtxtConnectionMessage;
 
@@ -50,11 +52,16 @@ public class ControllerActivity extends AppCompatActivity {
     private Handler mUpdateHandler;
     RemoteConnection mRemoteConnection;
 
-    protected static class RemoteHandler extends Handler {
+    public class RemoteHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             String command = msg.getData().getString("msg");
             Log.i(TAG, "received command :: " + command);
+            assert command != null;
+            if (command.equals(SERVER_STARTED)) {
+                // wait until the server socket is built before registering
+                registerNsdService();
+            }
         }
     }
 
@@ -70,7 +77,7 @@ public class ControllerActivity extends AppCompatActivity {
         mRemoteConnection= new RemoteConnection(mUpdateHandler);
         mNsdHelper = new NsdHelper(this);
         mNsdHelper.initializeNsd();
-        registerNsdService();
+        //registerNsdService();
 
 
         //txtConnectionMessage = (TextView) findViewById(R.id.connection_message);
