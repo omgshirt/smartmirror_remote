@@ -4,6 +4,7 @@ package org.remote.smartmirror.smartmirror_remote;
 import android.content.Context;
 import android.net.nsd.NsdServiceInfo;
 import android.net.nsd.NsdManager;
+import android.provider.Settings;
 import android.util.Log;
 
 public class NsdHelper {
@@ -20,18 +21,18 @@ public class NsdHelper {
     public static final String SERVICE_TYPE = "_http._tcp.";
 
     public static final String TAG = "NsdHelper";
-    public String mServiceName = "NsdSmartMirror";
+    public String mServiceName;
+    public String mDeviceName = APP_NAME;
+    public static final String APP_NAME ="SmartMirror";
 
     NsdServiceInfo mService;
 
     public NsdHelper(ControllerActivity context) {
         mContext = context;
         mNsdManager = (NsdManager) context.getSystemService(Context.NSD_SERVICE);
-    }
-
-    public void initializeNsd() {
+        mDeviceName +=  "_" + Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        mResolveListener = new MyResolveListener();
         initializeDiscoveryListener();
-        initializeRegistrationListener();
     }
 
     public void initializeDiscoveryListener() {
@@ -39,7 +40,7 @@ public class NsdHelper {
 
             @Override
             public void onDiscoveryStarted(String regType) {
-                Log.d(TAG, "Service discovery started");
+                Log.d(TAG, "Service discovery started :: " + regType);
             }
 
             @Override
@@ -49,8 +50,10 @@ public class NsdHelper {
                     Log.d(TAG, "Unknown Service Type: " + service.getServiceType());
                 } else if (service.getServiceName().equals(mServiceName)) {
                     Log.d(TAG, "Same machine: \"" + mServiceName + "\"");
-                } else if (service.getServiceName().contains(mServiceName)) {
-                    mNsdManager.resolveService(service, new MyResolveListener());
+                } else if (service.getServiceName().contains(APP_NAME)) {
+                    mNsdManager.resolveService(service, mResolveListener);
+                } else {
+                    Log.i(TAG, "Service not matched to application.. ?!");
                 }
             }
 
@@ -114,12 +117,13 @@ public class NsdHelper {
 
             @Override
             public void onRegistrationFailed(NsdServiceInfo arg0, int arg1) {
+                Log.e(TAG, "Registration Failed :: " + arg1);
             }
 
             @Override
             public void onServiceUnregistered(NsdServiceInfo arg0) {
                 serviceRegistered = false;
-                Log.d(TAG, "service unregistered");
+                Log.d(TAG, "service unregistered :: " + arg0);
             }
 
             @Override
@@ -130,12 +134,14 @@ public class NsdHelper {
     }
 
     public void registerService(int port) {
-        Log.i(ControllerActivity.TAG, "register service port :: " + port);
+        Log.i(TAG, "register service port :: " + port);
         NsdServiceInfo serviceInfo = new NsdServiceInfo();
         serviceInfo.setPort(port);
-        serviceInfo.setServiceName(mServiceName);
+        serviceInfo.setServiceName(mDeviceName);
         serviceInfo.setServiceType(SERVICE_TYPE);
-
+        unregisterService();
+        initializeRegistrationListener();
+        Log.i(TAG, "mRegistration initialized");
         mNsdManager.registerService(
                 serviceInfo, NsdManager.PROTOCOL_DNS_SD, mRegistrationListener);
 
@@ -155,6 +161,12 @@ public class NsdHelper {
 
     public NsdServiceInfo getChosenServiceInfo() {
         return mService;
+    }
+
+
+    public void unregisterService() {
+        if (mRegistrationListener != null)
+            mNsdManager.unregisterService(mRegistrationListener);
     }
 
     public void tearDown() {

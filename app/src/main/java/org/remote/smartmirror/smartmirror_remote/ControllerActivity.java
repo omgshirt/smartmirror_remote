@@ -43,7 +43,7 @@ public class ControllerActivity extends AppCompatActivity {
             String command = msg.getData().getString("msg");
             Log.i(TAG, "received command :: " + command);
             assert command != null;
-            if (command.equals(SERVER_STARTED)) {
+            if (command.equals("local:" + SERVER_STARTED)) {
                 // wait until the server socket is built before registering
                 registerNsdService();
             }
@@ -61,7 +61,6 @@ public class ControllerActivity extends AppCompatActivity {
         mUpdateHandler = new RemoteHandler();
         mRemoteConnection= new RemoteConnection(mUpdateHandler);
         mNsdHelper = new NsdHelper(this);
-        mNsdHelper.initializeNsd();
         //registerNsdService();
 
 

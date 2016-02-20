@@ -62,14 +62,10 @@ public class RemoteConnection {
 
     public synchronized void updateMessages(String msg, boolean local) {
         Log.e(TAG, "Updating message: " + msg);
-        
-        /*
+
         if (local) {
-            msg = "me: " + msg;
-        } else {
-            msg = "them: " + msg;
+            msg = "local:" + msg;
         }
-        */
 
         Bundle messageBundle = new Bundle();
         messageBundle.putString("msg", msg);
@@ -134,11 +130,11 @@ public class RemoteConnection {
                         Log.d(TAG, "ServerSocket Created, awaiting connection");
                         setSocket(mServerSocket.accept());
                         Log.d(TAG, "Connected.");
-                        if (mRemoteControlClient == null) {
+                        //if (mRemoteControlClient == null) {
                             int port = mSocket.getPort();
                             InetAddress address = mSocket.getInetAddress();
                             connectToServer(address, port);
-                        }
+                        //}
                     }
                 } catch (IOException e) {
                     Log.e(TAG, "Error creating ServerSocket: ", e);
@@ -239,6 +235,7 @@ public class RemoteConnection {
 
         public void tearDown() {
             try {
+                Log.i(TAG, "closing socket");
                 getSocket().close();
             } catch (IOException ioe) {
                 Log.e(TAG, "Error when closing server socket.");
