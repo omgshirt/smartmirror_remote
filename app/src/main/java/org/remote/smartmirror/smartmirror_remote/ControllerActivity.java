@@ -1,8 +1,6 @@
 package org.remote.smartmirror.smartmirror_remote;
 
-import android.content.IntentFilter;
 import android.net.nsd.NsdServiceInfo;
-import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,13 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 
 public class ControllerActivity extends AppCompatActivity {
@@ -33,12 +24,6 @@ public class ControllerActivity extends AppCompatActivity {
     public static final String SERVER_STARTED = "server started";
 
     private FloatingActionButton FabConnectToServer;
-    private TextView TtxtConnectionMessage;
-
-    private IntentFilter mWifiIntentFilter;
-    private ArrayList<WifiP2pDevice> mWifiDeviceList;
-    private ScheduledFuture<?> wifiHeartbeat;
-    private ArrayList<String> mPeerList;
 
     private ListView lstActionList;
     private ListView lstPeerList;
@@ -114,44 +99,6 @@ public class ControllerActivity extends AppCompatActivity {
             }
         });
 
-        // initialize PeerList
-        /*
-        mPeerList = new ArrayList<>();
-        ArrayAdapter<String> peerAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, mPeerList);
-        lstPeerList = (ListView) findViewById(R.id.peer_list);
-        lstPeerList.setAdapter(peerAdapter);
-        lstPeerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                connectToPeer(mWifiDeviceList.get(position));
-            }
-        });
-
-
-        // Initialize intent filter
-        mWifiIntentFilter = new IntentFilter();
-        mWifiIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-        mWifiIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-        mWifiIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-        mWifiIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
-
-        // Now that the manager is initialized, see if there are any peers
-
-        FabConnectToServer = (FloatingActionButton) findViewById(R.id.show_peers);
-        FabConnectToServer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (layPeerLayout.getVisibility() == View.GONE) {
-                    showPeers();
-                    discoverPeers();
-                } else {
-                    showModuleList();
-                }
-    }
-});
-        */
-
         FabConnectToServer = (FloatingActionButton) findViewById(R.id.show_peers);
         FabConnectToServer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,35 +165,9 @@ public class ControllerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         mNsdHelper.tearDown();
-        if (mRemoteConnection != null) {
-            mRemoteConnection.tearDown();
-        }
+        mRemoteConnection.tearDown();
         super.onDestroy();
 
-    }
-
-
-    // OnStop, start a thread that keeps the wifip2p connection alive by pinging every 60 seconds
-    private void startWifiHeartbeat() {
-        ScheduledThreadPoolExecutor scheduler = (ScheduledThreadPoolExecutor)
-                Executors.newScheduledThreadPool(1);
-
-        final Runnable heartbeatTask = new Runnable() {
-            @Override
-            public void run() {
-
-                Log.i("Wifi", "Heartbeat: discoverPeers()");
-            }
-        };
-        wifiHeartbeat = scheduler.scheduleAtFixedRate(heartbeatTask, 60, 60,
-                TimeUnit.SECONDS);
-    }
-
-    // Stop the heartbeat thread
-    public void stopWifiHeartbeat() {
-        if (wifiHeartbeat != null) {
-            wifiHeartbeat.cancel(true);
-        }
     }
 
     // call helper to register
