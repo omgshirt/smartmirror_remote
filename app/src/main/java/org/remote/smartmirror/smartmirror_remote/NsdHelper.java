@@ -8,12 +8,14 @@ import android.util.Log;
 
 public class NsdHelper {
 
-    Context mContext;
+    ControllerActivity mContext;
 
     NsdManager mNsdManager;
     NsdManager.ResolveListener mResolveListener;
     NsdManager.DiscoveryListener mDiscoveryListener;
     NsdManager.RegistrationListener mRegistrationListener;
+
+    boolean serviceRegistered = false;
 
     public static final String SERVICE_TYPE = "_http._tcp.";
 
@@ -22,17 +24,14 @@ public class NsdHelper {
 
     NsdServiceInfo mService;
 
-    public NsdHelper(Context context) {
+    public NsdHelper(ControllerActivity context) {
         mContext = context;
         mNsdManager = (NsdManager) context.getSystemService(Context.NSD_SERVICE);
     }
 
     public void initializeNsd() {
-        initializeResolveListener();
         initializeDiscoveryListener();
         initializeRegistrationListener();
-
-        //mNsdManager.init(mContext.getMainLooper(), this);
 
     }
 
@@ -46,13 +45,13 @@ public class NsdHelper {
 
             @Override
             public void onServiceFound(NsdServiceInfo service) {
-                Log.d(TAG, "Service discovery success" + service);
+                Log.d(TAG, "onServiceFound() :: " + service);
                 if (!service.getServiceType().equals(SERVICE_TYPE)) {
                     Log.d(TAG, "Unknown Service Type: " + service.getServiceType());
                 } else if (service.getServiceName().equals(mServiceName)) {
-                    Log.d(TAG, "Same machine: " + mServiceName);
+                    Log.d(TAG, "Same machine: \"" + mServiceName + "\"");
                 } else if (service.getServiceName().contains(mServiceName)) {
-                    mNsdManager.resolveService(service, mResolveListener);
+                    mNsdManager.resolveService(service, new MyResolveListener());
                 }
             }
 
@@ -83,33 +82,35 @@ public class NsdHelper {
         };
     }
 
-    public void initializeResolveListener() {
-        mResolveListener = new NsdManager.ResolveListener() {
+    private class MyResolveListener implements NsdManager.ResolveListener {
+        @Override
+        public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
+            Log.e(TAG, "Resolve failed" + errorCode);
+        }
 
-            @Override
-            public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
-                Log.e(TAG, "Resolve failed" + errorCode);
+        @Override
+        public void onServiceResolved(NsdServiceInfo serviceInfo) {
+            Log.e(TAG, "Resolve Succeeded. " + serviceInfo);
+
+            if (serviceInfo.getServiceName().equals(mServiceName)) {
+                Log.d(TAG, "Same IP.");
+                return;
             }
-
-            @Override
-            public void onServiceResolved(NsdServiceInfo serviceInfo) {
-                Log.e(TAG, "Resolve Succeeded. " + serviceInfo);
-
-                if (serviceInfo.getServiceName().equals(mServiceName)) {
-                    Log.d(TAG, "Same IP.");
-                    return;
-                }
-                mService = serviceInfo;
-            }
-        };
+            mService = serviceInfo;
+            mContext.connectToRemote();
+        }
     }
+
 
     public void initializeRegistrationListener() {
         mRegistrationListener = new NsdManager.RegistrationListener() {
 
             @Override
-            public void onServiceRegistered(NsdServiceInfo NsdServiceInfo) {
-                mServiceName = NsdServiceInfo.getServiceName();
+            public void onServiceRegistered(NsdServiceInfo nsdServiceInfo) {
+                mServiceName = nsdServiceInfo.getServiceName();
+                Log.d(TAG, "service registered as " + nsdServiceInfo);
+                serviceRegistered = true;
+                discoverServices();
             }
 
             @Override
@@ -118,6 +119,8 @@ public class NsdHelper {
 
             @Override
             public void onServiceUnregistered(NsdServiceInfo arg0) {
+                serviceRegistered = false;
+                Log.d(TAG, "service unregistered");
             }
 
             @Override
@@ -140,8 +143,11 @@ public class NsdHelper {
     }
 
     public void discoverServices() {
-        mNsdManager.discoverServices(
-                SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
+        if (serviceRegistered) {
+            Log.d(TAG, "discoverServices()");
+            mNsdManager.discoverServices(
+                    SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
+        }
     }
 
     public void stopDiscovery() {
@@ -154,6 +160,7 @@ public class NsdHelper {
 
     public void tearDown() {
         mNsdManager.unregisterService(mRegistrationListener);
+        mResolveListener = null;
     }
 }
 

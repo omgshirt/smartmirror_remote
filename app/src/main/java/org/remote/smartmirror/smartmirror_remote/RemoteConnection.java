@@ -22,7 +22,7 @@ public class RemoteConnection {
 
     private Handler mUpdateHandler;
     private RemoteServer mRemoteServer;
-    private RemoteClient mRemoteClient;
+    private RemoteControlClient mRemoteControlClient;
 
     private static final String TAG = "RemoteConnection";
 
@@ -35,19 +35,19 @@ public class RemoteConnection {
     }
 
     public void tearDown() {
-        if (mRemoteClient != null) {
+        if (mRemoteControlClient != null) {
             mRemoteServer.tearDown();
-            mRemoteClient.tearDown();
+            mRemoteControlClient.tearDown();
         }
     }
 
     public void connectToServer(InetAddress address, int port) {
-        mRemoteClient = new RemoteClient(address, port);
+        mRemoteControlClient = new RemoteControlClient(address, port);
     }
 
     public void sendMessage(String msg) {
-        if (mRemoteClient != null) {
-            mRemoteClient.sendMessage(msg);
+        if (mRemoteControlClient != null) {
+            mRemoteControlClient.sendMessage(msg);
         }
     }
 
@@ -132,7 +132,7 @@ public class RemoteConnection {
                         Log.d(TAG, "ServerSocket Created, awaiting connection");
                         setSocket(mServerSocket.accept());
                         Log.d(TAG, "Connected.");
-                        if (mRemoteClient == null) {
+                        if (mRemoteControlClient == null) {
                             int port = mSocket.getPort();
                             InetAddress address = mSocket.getInetAddress();
                             connectToServer(address, port);
@@ -146,17 +146,17 @@ public class RemoteConnection {
         }
     }
 
-    private class RemoteClient {
+    private class RemoteControlClient {
 
         private InetAddress mAddress;
         private int PORT;
 
-        private final String CLIENT_TAG = "RemoteClient";
+        private final String CLIENT_TAG = "RemoteControlClient";
 
         private Thread mSendThread;
         private Thread mRecThread;
 
-        public RemoteClient(InetAddress address, int port) {
+        public RemoteControlClient(InetAddress address, int port) {
 
             Log.d(CLIENT_TAG, "Creating remoteClient");
             this.mAddress = address;
@@ -228,7 +228,7 @@ public class RemoteConnection {
                         }
                     }
                     input.close();
-
+                    Log.i(CLIENT_TAG, "receiving thread closed");
                 } catch (IOException e) {
                     Log.e(CLIENT_TAG, "Server loop error: ", e);
                 }

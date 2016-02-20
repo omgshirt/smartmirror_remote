@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,10 +28,10 @@ import java.util.concurrent.TimeUnit;
 
 public class ControllerActivity extends AppCompatActivity {
 
-    public static final String TAG = "remote";
+    public static final String TAG = "Remote";
 
     private FloatingActionButton FabConnectToServer;
-    private TextView txtConnectionMessage;
+    private TextView TtxtConnectionMessage;
 
     private IntentFilter mWifiIntentFilter;
     private ArrayList<WifiP2pDevice> mWifiDeviceList;
@@ -63,8 +62,8 @@ public class ControllerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.controller_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         // start NSD
         mUpdateHandler = new RemoteHandler();
@@ -74,7 +73,7 @@ public class ControllerActivity extends AppCompatActivity {
         registerNsdService();
 
 
-        txtConnectionMessage = (TextView) findViewById(R.id.connection_message);
+        //txtConnectionMessage = (TextView) findViewById(R.id.connection_message);
         mActionList = getResources().getStringArray(R.array.module_list);
         layPeerLayout = (LinearLayout) findViewById(R.id.peer_layout);
         layModuleLayout = (LinearLayout) findViewById(R.id.module_layout);
@@ -142,15 +141,15 @@ public class ControllerActivity extends AppCompatActivity {
                 } else {
                     showModuleList();
                 }
-            }
-        });
+    }
+});
         */
 
         FabConnectToServer = (FloatingActionButton) findViewById(R.id.show_peers);
         FabConnectToServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                clickConnect(view);
+                connectToRemote();
             }
         });
     }
@@ -254,10 +253,10 @@ public class ControllerActivity extends AppCompatActivity {
     }
 
     // connect to a server
-    public void clickConnect(View v) {
+    public void connectToRemote() {
         NsdServiceInfo service = mNsdHelper.getChosenServiceInfo();
         if (service != null) {
-            Log.d(TAG, "Connecting.");
+            Log.d(TAG, "Connecting to server :: " + service.toString());
             mRemoteConnection.connectToServer(service.getHost(),
                     service.getPort());
         } else {
