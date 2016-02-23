@@ -24,7 +24,7 @@ public class NsdHelper {
     // Service name is given by the framework based on mDeviceName
     public String mServiceName;
     // APP_NAME is shared by both remote and mirror app
-    public static final String APP_NAME ="SmartMirror";
+    public static final String APP_NAME = "SmartMirror";
     public String mDeviceName = APP_NAME;
 
     NsdServiceInfo mService;
@@ -32,7 +32,7 @@ public class NsdHelper {
     public NsdHelper(ControllerActivity context) {
         mContext = context;
         mNsdManager = (NsdManager) context.getSystemService(Context.NSD_SERVICE);
-        mDeviceName +=  "_" + Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        mDeviceName += "_" + Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         mResolveListener = new MyResolveListener();
         initializeDiscoveryListener();
     }
@@ -54,6 +54,7 @@ public class NsdHelper {
                     Log.d(TAG, "Same machine: \"" + mServiceName + "\"");
                 } else if (service.getServiceName().contains(APP_NAME)) {
                     mNsdManager.resolveService(service, mResolveListener);
+                    mContext.serviceDiscovered(service);
                 } else {
                     Log.i(TAG, "Service not matched to application.. ?!");
                 }
@@ -65,11 +66,13 @@ public class NsdHelper {
                 if (mService == service) {
                     mService = null;
                 }
+                mContext.serviceLost(service);
             }
 
             @Override
             public void onDiscoveryStopped(String serviceType) {
                 Log.i(TAG, "Discovery stopped: " + serviceType);
+                mContext.clearServices();
             }
 
             @Override

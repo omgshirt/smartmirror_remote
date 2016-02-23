@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="module_list">
+    <string-array name="fragment_commands">
         <item>Calendar</item>
         <item>Camera</item>
+        <item>Conditions</item>
+        <item>Current Time</item>
         <item>Forecast</item>
         <item>Facebook</item>
         <item>Gallery</item>
         <item>Gmail</item>
-        <item>Help</item>
         <item>Light</item>
         <item>Quotes</item>
         <item>Settings</item>
@@ -19,5 +20,36 @@
         <item>Technology</item>
         <item>Travel</item>
         <item>World</item>
+    </string-array>
+
+    <string-array name="general_commands">
+        <item>Scroll Up</item>
+        <item>Scroll Down</item>
+        <item>Back</item>
+        <item>Help</item>
+        <item>Screen Size</item>
+        <item>Show Weather</item>
+        <item>Show Time</item>
+    </string-array>
+
+    <string-array name="settings_commands">
+        <item>Screen Brightness</item>
+        <item>Speech Volume</item>
+        <item>System Volume</item>
+        <item>Time Format</item>
+        <item>Weather Format</item>
+        <item>Voice Recognition</item>
+    </string-array>
+
+    <string-array name="numbers">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
     </string-array>
 </resources>

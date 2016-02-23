@@ -16,6 +16,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
 
 public class ControllerActivity extends AppCompatActivity {
 
@@ -23,19 +28,29 @@ public class ControllerActivity extends AppCompatActivity {
 
     public static final String SERVER_STARTED = "server started";
 
-    private FloatingActionButton FabConnectToServer;
+    private HashMap<String,NsdServiceInfo> mServiceMap;
+    ArrayAdapter<String> peerAdapter;
 
+    private FloatingActionButton fabShowPeers;
     private ListView lstActionList;
     private ListView lstPeerList;
+    private ListView lstGeneralList;
     private LinearLayout layPeerLayout;
     private LinearLayout layModuleLayout;
-    private String[] mActionList;
+    private List<String> mActionList;
+    private List<String> mGeneralList;
     private Button btnSleep;
     private Button btnWake;
 
     NsdHelper mNsdHelper;
     private Handler mUpdateHandler;
     RemoteConnection mRemoteConnection;
+    final ArrayList<String> peerList = new ArrayList<>();
+
+    private String[] screenSizes = { "close window", "small screen", "wide screen", "full screen"};
+    private int screenState = 0;
+    private String[] weatherVisibility = { "show weather", "hide weather" };
+    private int weatherState = 0;
 
     public class RemoteHandler extends Handler {
         @Override
@@ -57,6 +72,8 @@ public class ControllerActivity extends AppCompatActivity {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
+        mServiceMap = new HashMap<>();
+
         // start NSD
         mUpdateHandler = new RemoteHandler();
         mRemoteConnection= new RemoteConnection(mUpdateHandler);
@@ -65,9 +82,17 @@ public class ControllerActivity extends AppCompatActivity {
 
 
         //txtConnectionMessage = (TextView) findViewById(R.id.connection_message);
-        mActionList = getResources().getStringArray(R.array.module_list);
+        mActionList = new ArrayList<>();
+        mActionList.addAll(Arrays.asList(getResources().getStringArray(R.array.fragment_commands)));
+
+        mGeneralList = new ArrayList<>();
+        mGeneralList.addAll(Arrays.asList(getResources().getStringArray(R.array.general_commands)));
+        mGeneralList.addAll(Arrays.asList(getResources().getStringArray(R.array.settings_commands)));
+        mGeneralList.addAll(Arrays.asList(getResources().getStringArray(R.array.numbers)));
+
         layPeerLayout = (LinearLayout) findViewById(R.id.peer_layout);
         layModuleLayout = (LinearLayout) findViewById(R.id.module_layout);
+
 
         // set up sleep and wake buttons
         btnSleep = (Button) findViewById(R.id.sleep_button);
@@ -85,24 +110,53 @@ public class ControllerActivity extends AppCompatActivity {
             }
         });
 
-        // initialize ActionList
-        ArrayAdapter<String> actionAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, mActionList);
-        lstActionList = (ListView) findViewById(R.id.mirror_action_list);
-        lstActionList.setAdapter(actionAdapter);
-        lstActionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ArrayAdapter<String> generalAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, mGeneralList);
+        lstGeneralList = (ListView) findViewById(R.id.mirror_general_list);
+        lstGeneralList.setAdapter(generalAdapter);
+        lstGeneralList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String command = mActionList[position].toLowerCase();
+                String command = mGeneralList.get(position).toLowerCase();
                 sendCommandToMirror(command);
             }
         });
 
-        FabConnectToServer = (FloatingActionButton) findViewById(R.id.show_peers);
-        FabConnectToServer.setOnClickListener(new View.OnClickListener() {
+        // initialize ActionList
+        ArrayAdapter<String> actionAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, mActionList);
+        lstActionList = (ListView) findViewById(R.id.mirror_fragment_list);
+        lstActionList.setAdapter(actionAdapter);
+        lstActionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String command = mActionList.get(position).toLowerCase();
+                sendCommandToMirror(command);
+            }
+        });
+
+        peerList.addAll(mServiceMap.keySet());
+        peerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+                peerList);
+        lstPeerList = (ListView) findViewById(R.id.peer_list);
+        lstPeerList.setAdapter(peerAdapter);
+        lstPeerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // TODO: connect to selected item
+                Log.d(TAG, "connecting to :: " + peerList.get(position));
+            }
+        });
+
+        // toggle between peer list and command list
+        fabShowPeers = (FloatingActionButton) findViewById(R.id.show_peers);
+        fabShowPeers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                connectToRemote();
+                if (layPeerLayout.getVisibility() == View.VISIBLE)
+                    showModuleList();
+                else
+                    showPeers();
             }
         });
     }
@@ -193,7 +247,41 @@ public class ControllerActivity extends AppCompatActivity {
 
     public void sendCommandToMirror(String command) {
         if (!command.isEmpty()) {
+            command = interpretCommand(command);
             mRemoteConnection.sendMessage(command);
         }
+    }
+
+    public String interpretCommand(String command) {
+        if (command.equals("screen size")) {
+            command = screenSizes[ ++screenState % screenSizes.length ];
+        } else if (command.equals("show weather")) {
+            command = weatherVisibility[ ++weatherState % weatherVisibility.length ];
+        }
+
+        return command;
+    }
+
+    public void serviceDiscovered(NsdServiceInfo service){
+        mServiceMap.put(service.getServiceName(), service);
+        peerList.add(service.getServiceName());
+        //ArrayAdapter<String> adapter = (ArrayAdapter<String>)lstPeerList.getAdapter();
+        peerAdapter.notifyDataSetChanged();
+        Log.d(TAG, "Adding service :: " + peerAdapter.toString());
+
+    }
+
+    public void serviceLost(NsdServiceInfo service) {
+        mServiceMap.remove(service.getServiceName());
+        peerList.remove(service.getServiceName());
+        peerAdapter.notifyDataSetChanged();
+    }
+
+    public void clearServices() {
+        mServiceMap.clear();
+    }
+
+    public HashMap<String, NsdServiceInfo> getServiceMap() {
+        return mServiceMap;
     }
 }
