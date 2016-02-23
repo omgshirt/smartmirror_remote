@@ -31,12 +31,12 @@ public class RemoteConnection {
 
     public RemoteConnection(Handler handler) {
         mUpdateHandler = handler;
-        mRemoteServer = new RemoteServer(handler);
+        //mRemoteServer = new RemoteServer(handler);
     }
 
     public void tearDown() {
         if (mRemoteControlClient != null) {
-            mRemoteServer.tearDown();
+            //mRemoteServer.tearDown();
             mRemoteControlClient.tearDown();
         }
     }

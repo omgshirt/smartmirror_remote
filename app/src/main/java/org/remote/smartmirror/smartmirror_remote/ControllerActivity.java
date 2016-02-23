@@ -191,10 +191,6 @@ public class ControllerActivity extends AppCompatActivity {
         }
     }
 
-    public void clickDiscover(View v) {
-        mNsdHelper.discoverServices();
-    }
-
     public void sendCommandToMirror(String command) {
         if (!command.isEmpty()) {
             mRemoteConnection.sendMessage(command);

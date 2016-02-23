@@ -21,9 +21,11 @@ public class NsdHelper {
     public static final String SERVICE_TYPE = "_http._tcp.";
 
     public static final String TAG = "NsdHelper";
+    // Service name is given by the framework based on mDeviceName
     public String mServiceName;
-    public String mDeviceName = APP_NAME;
+    // APP_NAME is shared by both remote and mirror app
     public static final String APP_NAME ="SmartMirror";
+    public String mDeviceName = APP_NAME;
 
     NsdServiceInfo mService;
 
@@ -110,7 +112,7 @@ public class NsdHelper {
             @Override
             public void onServiceRegistered(NsdServiceInfo nsdServiceInfo) {
                 mServiceName = nsdServiceInfo.getServiceName();
-                Log.d(TAG, "service registered as " + nsdServiceInfo);
+                Log.d(TAG, "Service registered as " + nsdServiceInfo);
                 serviceRegistered = true;
                 discoverServices();
             }
@@ -123,7 +125,7 @@ public class NsdHelper {
             @Override
             public void onServiceUnregistered(NsdServiceInfo arg0) {
                 serviceRegistered = false;
-                Log.d(TAG, "service unregistered :: " + arg0);
+                //Log.d(TAG, "service unregistered :: " + arg0);
             }
 
             @Override
@@ -148,11 +150,16 @@ public class NsdHelper {
     }
 
     public void discoverServices() {
+        /*
         if (serviceRegistered) {
             Log.d(TAG, "discoverServices()");
             mNsdManager.discoverServices(
                     SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
         }
+        */
+        Log.d(TAG, "discoverServices()");
+        mNsdManager.discoverServices(
+                SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
     }
 
     public void stopDiscovery() {
@@ -170,7 +177,7 @@ public class NsdHelper {
     }
 
     public void tearDown() {
-        mNsdManager.unregisterService(mRegistrationListener);
+        //mNsdManager.unregisterService(mRegistrationListener);
         mResolveListener = null;
     }
 }
