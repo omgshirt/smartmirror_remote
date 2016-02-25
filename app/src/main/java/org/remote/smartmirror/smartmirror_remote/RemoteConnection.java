@@ -235,7 +235,8 @@ public class RemoteConnection {
         public void tearDown() {
             try {
                 Log.i(TAG, "closing socket");
-                getSocket().close();
+                if (getSocket() != null)
+                    getSocket().close();
             } catch (IOException ioe) {
                 Log.e(TAG, "Error when closing server socket.");
             }
