@@ -47,6 +47,7 @@ public class ControllerActivity extends AppCompatActivity {
     RemoteConnection mRemoteConnection;
     final ArrayList<String> peerList = new ArrayList<>();
 
+    // TODO: import Constants from main application to ensure similar naming - consider grunt to keep synced?
     private String[] screenSizes = { "close window", "small screen", "wide screen", "full screen"};
     private int screenState = 0;
     private String[] weatherVisibility = { "show weather", "hide weather" };
@@ -57,11 +58,6 @@ public class ControllerActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             String command = msg.getData().getString("msg");
             Log.i(TAG, "received command :: " + command);
-            assert command != null;
-            if (command.equals("local:" + SERVER_STARTED)) {
-                // wait until the server socket is built before registering
-                registerNsdService();
-            }
         }
     }
 
@@ -212,6 +208,7 @@ public class ControllerActivity extends AppCompatActivity {
         super.onPause();
         if (mNsdHelper != null) {
             mNsdHelper.stopDiscovery();
+            mRemoteConnection.tearDown();
         }
     }
 
@@ -221,16 +218,6 @@ public class ControllerActivity extends AppCompatActivity {
         mRemoteConnection.tearDown();
         super.onDestroy();
 
-    }
-
-    // call helper to register
-    public void registerNsdService() {
-        // Register service
-        if(mRemoteConnection.getLocalPort() > -1) {
-            mNsdHelper.registerService(mRemoteConnection.getLocalPort());
-        } else {
-            Log.d(TAG, "ServerSocket isn't bound.");
-        }
     }
 
     // connect to a server
@@ -263,12 +250,19 @@ public class ControllerActivity extends AppCompatActivity {
     }
 
     public void serviceDiscovered(NsdServiceInfo service){
-        mServiceMap.put(service.getServiceName(), service);
-        peerList.add(service.getServiceName());
+        String name = service.getServiceName();
+        if (mServiceMap.containsKey(name)) return;
+        mServiceMap.put(name, service);
+        peerList.add(name);
         //ArrayAdapter<String> adapter = (ArrayAdapter<String>)lstPeerList.getAdapter();
-        peerAdapter.notifyDataSetChanged();
-        Log.d(TAG, "Adding service :: " + peerAdapter.toString());
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                peerAdapter.notifyDataSetChanged();
+                Log.d(TAG, "Adding service :: " + peerAdapter.toString());
+            }
+        });
     }
 
     public void serviceLost(NsdServiceInfo service) {

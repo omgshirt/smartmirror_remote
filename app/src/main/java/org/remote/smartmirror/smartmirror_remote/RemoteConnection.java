@@ -176,13 +176,13 @@ public class RemoteConnection {
             @Override
             public void run() {
                 try {
-                    if (getSocket() == null) {
+                    //if (getSocket() == null) {
                         setSocket(new Socket(mAddress, PORT));
                         Log.d(TAG, "Client-side socket initialized.");
 
-                    } else {
-                        Log.d(TAG, "Socket already initialized. skipping!");
-                    }
+                    //} else {
+                    //    Log.d(TAG, "Socket already initialized. skipping!");
+                    //}
 
                     mRecThread = new Thread(new ReceivingThread());
                     mRecThread.start();
@@ -226,9 +226,8 @@ public class RemoteConnection {
                         }
                     }
                     input.close();
-                    Log.i(TAG, "receiving thread closed");
                 } catch (IOException e) {
-                    Log.e(TAG, "Server loop error: ", e);
+                    Log.i(TAG, "receiving thread closed");
                 }
             }
         }

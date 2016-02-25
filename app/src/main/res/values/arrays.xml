@@ -3,13 +3,12 @@
     <string-array name="fragment_commands">
         <item>Calendar</item>
         <item>Camera</item>
-        <item>Conditions</item>
-        <item>Current Time</item>
         <item>Forecast</item>
         <item>Facebook</item>
         <item>Gallery</item>
         <item>Gmail</item>
         <item>Light</item>
+        <item>Photos</item>
         <item>Quotes</item>
         <item>Settings</item>
         <item>Twitter</item>
@@ -30,6 +29,10 @@
         <item>Screen Size</item>
         <item>Show Weather</item>
         <item>Show Time</item>
+        <item>Conditions</item>
+        <item>Current Time</item>
+        <item>Stay Awake</item>
+        <item>Take a Picture</item>
     </string-array>
 
     <string-array name="settings_commands">
