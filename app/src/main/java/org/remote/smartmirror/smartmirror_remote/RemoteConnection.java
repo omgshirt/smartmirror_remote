@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -21,22 +20,18 @@ import java.util.concurrent.BlockingQueue;
 public class RemoteConnection {
 
     private Handler mUpdateHandler;
-    private RemoteServer mRemoteServer;
     private RemoteControlClient mRemoteControlClient;
 
     private static final String TAG = "RemoteConnection";
 
     private Socket mSocket;
-    private int mPort = -1;
 
     public RemoteConnection(Handler handler) {
         mUpdateHandler = handler;
-        //mRemoteServer = new RemoteServer(handler);
     }
 
     public void tearDown() {
         if (mRemoteControlClient != null) {
-            //mRemoteServer.tearDown();
             mRemoteControlClient.tearDown();
         }
     }
@@ -50,15 +45,6 @@ public class RemoteConnection {
             mRemoteControlClient.sendMessage(msg);
         }
     }
-
-    public int getLocalPort() {
-        return mPort;
-    }
-
-    public void setLocalPort(int port) {
-        mPort = port;
-    }
-
 
     public synchronized void updateMessages(String msg, boolean local) {
         Log.e(TAG, "Updating message: " + msg);
@@ -97,53 +83,6 @@ public class RemoteConnection {
         return mSocket;
     }
 
-    private class RemoteServer {
-        ServerSocket mServerSocket = null;
-        Thread mThread = null;
-
-        public RemoteServer(Handler handler) {
-            mThread = new Thread(new ServerThread());
-            mThread.start();
-        }
-
-        public void tearDown() {
-            mThread.interrupt();
-            try {
-                mServerSocket.close();
-            } catch (IOException ioe) {
-                Log.e(TAG, "Error when closing server socket.");
-            }
-        }
-
-        class ServerThread implements Runnable {
-
-            @Override
-            public void run() {
-
-                try {
-                    // Since discovery will happen via Nsd, we don't need to care which port is
-                    // used.  Just grab an available one  and advertise it via Nsd.
-                    mServerSocket = new ServerSocket(0);
-                    setLocalPort(mServerSocket.getLocalPort());
-                    updateMessages(ControllerActivity.SERVER_STARTED, true);
-                    while (!Thread.currentThread().isInterrupted()) {
-                        Log.d(TAG, "ServerSocket Created, awaiting connection");
-                        setSocket(mServerSocket.accept());
-                        Log.d(TAG, "Connected.");
-                        //if (mRemoteControlClient == null) {
-                            int port = mSocket.getPort();
-                            InetAddress address = mSocket.getInetAddress();
-                            connectToServer(address, port);
-                        //}
-                    }
-                } catch (IOException e) {
-                    Log.e(TAG, "Error creating ServerSocket: ", e);
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
     private class RemoteControlClient {
 
         private InetAddress mAddress;
@@ -170,7 +109,7 @@ public class RemoteConnection {
             private int QUEUE_CAPACITY = 10;
 
             public SendingThread() {
-                mMessageQueue = new ArrayBlockingQueue<String>(QUEUE_CAPACITY);
+                mMessageQueue = new ArrayBlockingQueue<>(QUEUE_CAPACITY);
             }
 
             @Override

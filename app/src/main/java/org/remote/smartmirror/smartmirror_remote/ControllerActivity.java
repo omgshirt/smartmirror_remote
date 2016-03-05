@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -227,6 +228,7 @@ public class ControllerActivity extends AppCompatActivity {
             Log.d(TAG, "Connecting to server :: " + service.toString());
             mRemoteConnection.connectToServer(service.getHost(),
                     service.getPort());
+            Toast.makeText(this, "Connected to SmartMirror", Toast.LENGTH_LONG).show();
         } else {
             Log.d(TAG, "No service to connect to!");
         }
@@ -269,6 +271,7 @@ public class ControllerActivity extends AppCompatActivity {
         mServiceMap.remove(service.getServiceName());
         peerList.remove(service.getServiceName());
         peerAdapter.notifyDataSetChanged();
+
     }
 
     public void clearServices() {

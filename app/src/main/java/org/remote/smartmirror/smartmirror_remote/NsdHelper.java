@@ -58,7 +58,7 @@ public class NsdHelper {
 
         @Override
         public void onServiceLost(NsdServiceInfo service) {
-            Log.e(TAG, "service lost" + service);
+            Log.i(TAG, "service lost :: " + service);
             if (mService == service) {
                 mService = null;
             }
