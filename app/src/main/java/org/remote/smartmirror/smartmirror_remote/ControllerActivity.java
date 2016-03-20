@@ -168,9 +168,6 @@ public class ControllerActivity extends AppCompatActivity {
             case R.id.weather_format:
                 command = "toggle weather format";
                 break;
-            case R.id.weather_visible:
-                command = "toggle weather visibility";
-                break;
             default:
                 command = ((TextView)view).getText().toString().toLowerCase(Locale.US);
                 break;
