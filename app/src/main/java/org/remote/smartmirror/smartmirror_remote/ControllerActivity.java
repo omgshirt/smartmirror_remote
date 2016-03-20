@@ -1,5 +1,7 @@
 package org.remote.smartmirror.smartmirror_remote;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,10 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 
 public class ControllerActivity extends AppCompatActivity {
@@ -56,9 +60,9 @@ public class ControllerActivity extends AppCompatActivity {
 
         //txtConnectionMessage = (TextView) findViewById(R.id.connection_message);
 
-        // create a ContextControlsFragment using the MAIN_MENU layout
+        // create a ContextControlsFragment using the DEFAULT_CONTROLS layout
         if (savedInstanceState == null) {
-            replaceFragment(ContextFragment.newInstance(ContextFragment.MAIN_MENU));
+            replaceFragment(ContextFragment.newInstance(ContextFragment.DEFAULT_CONTROLS));
         }
 
 
@@ -98,74 +102,74 @@ public class ControllerActivity extends AppCompatActivity {
     }
 
     private void replaceFragment(Fragment fragment){
-        getSupportFragmentManager().beginTransaction().add(R.id.context_controls, fragment).commit();
+        Log.i(TAG, "creating fragment :: " + fragment);
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.context_controls, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     public void onButtonClicked(View view){
         String command = "";
+
+        // Change to article selection if a news desk is chosen
         switch (view.getId()) {
-            case R.id.calendar:
-                command = "calendar";
+            case R.id.business:
+            case R.id.media:
+            case R.id.science:
+            case R.id.sports:
+            case R.id.technology:
+            case R.id.travel:
+            case R.id.world:
+                replaceFragment(ContextFragment.newInstance(ContextFragment.ARTICLE_CONTROLS));
                 break;
+            default:
+                break;
+        }
+
+        // change context views and send commands to mirror
+        switch (view.getId()) {
             case R.id.camera:
+                replaceFragment(ContextFragment.newInstance(ContextFragment.CAMERA_CONTROLS));
                 command = "camera";
                 break;
-            case R.id.facebook:
-                command = "facebook";
-                break;
-            case R.id.gallery:
-                command = "gallery";
-                break;
             case R.id.gmail:
+                replaceFragment(ContextFragment.newInstance(ContextFragment.GMAIL_CONTROLS));
                 command = "gmail";
-                break;
-            case R.id.go_back:
-                command = "go back";
-                break;
-            case R.id.go_forward:
-                command = "go forward";
-                break;
-            case R.id.help:
-                command = "help";
                 break;
             case R.id.increase_screen_size:
                 command = "increase screen size";
                 break;
             case R.id.news:
-                command = "news";
-                break;
-            case R.id.night_light:
-                command = "night light";
-                break;
-            case R.id.photos:
-                command = "photos";
+                replaceFragment(ContextFragment.newInstance(ContextFragment.NEWS_CONTROLS));
                 break;
             case R.id.power:
                 command = "toggle wake";
                 break;
-            case R.id.quotes:
-                command = "quotes";
-                break;
-            case R.id.scroll_down:
-                command = "scroll down";
-                break;
-            case R.id.scroll_up:
-                command = "scroll up";
-                break;
             case R.id.settings:
                 command = "settings";
+                replaceFragment(ContextFragment.newInstance(ContextFragment.SETTINGS_CONTROLS));
                 break;
             case R.id.toggle_listening:
                 command = "toggle listening";
                 break;
-            case R.id.twitter:
-                command = "twitter";
+            default:
+                command = ((TextView)view).getText().toString().toLowerCase(Locale.US);
                 break;
         }
 
         if (!command.isEmpty()) {
             Log.i(TAG, "sending command :: " + command);
             sendCommandToMirror(command);
+        }
+    }
+
+    @Override
+    public void onBackPressed(){
+        // ignore back presses if it would remove first entry
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            super.onBackPressed();
         }
     }
 

@@ -10,11 +10,10 @@
     android:paddingRight="6dp"
     android:paddingTop="10dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity"
-    tools:showIn="@layout/controller_activity">
+    tools:context=".MainActivity">
 
     <android.support.v7.widget.GridLayout
-        android:id="@+id/default_buttons"
+        android:id="@+id/default_controls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:columnCount="4"

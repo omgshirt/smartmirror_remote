@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/news_controls"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:columnCount="4"
+    app:rowCount="3"
+    tools:showIn="@layout/content_main">
+    <!-- row 1 -->
+    <TextView
+        android:id="@+id/business"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/arrow_down"
+        android:text="@string/business"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/media"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/power"
+        android:text="@string/media"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/science"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/power"
+        android:text="@string/science"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/sports"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/arrow_down"
+        android:text="@string/sports"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <!-- row 2 -->
+    <TextView
+        android:id="@+id/technology"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/arrow_down"
+        android:text="@string/technology"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/travel"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/power"
+        android:text="@string/travel"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/world"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/power"
+        android:text="@string/world"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+</android.support.v7.widget.GridLayout>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settings_controls"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:columnCount="4"
+    app:rowCount="3">
+
+    <!-- row 1 -->
+    <TextView
+        android:id="@+id/stay_awake"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/arrow_down"
+        android:text="@string/stay_awake"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/speech"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/power"
+        android:text="@string/speech"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/listening_settings"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/power"
+        android:text="@string/listening"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/time_format"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/arrow_down"
+        android:text="@string/time_format"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <!-- row 2 -->
+    <TextView
+        android:id="@+id/time_visible"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/arrow_down"
+        android:text="@string/time_visible"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/weather_format"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/power"
+        android:text="@string/weather_format"
+        android:textSize="12sp"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/weather_visible"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/power"
+        android:text="@string/weather_visible"
+        android:textSize="12sp"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+</android.support.v7.widget.GridLayout>

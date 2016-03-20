@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/article_controls"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:columnCount="4"
+    app:rowCount="3"
+    tools:showIn="@layout/content_main">
+
+    <!-- row 1 -->
+    <TextView
+        android:id="@+id/one"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/arrow_down"
+        android:text="@string/one"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/two"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/power"
+        android:text="@string/two"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/three"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/power"
+        android:text="@string/three"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/four"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/arrow_down"
+        android:text="@string/four"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <!-- row 2 -->
+    <TextView
+        android:id="@+id/five"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/arrow_down"
+        android:text="@string/five"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/six"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/power"
+        android:text="@string/six"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/seven"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/power"
+        android:text="@string/seven"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/eight"
+        style="@style/RemoteButton"
+        android:drawablePadding="3dp"
+        android:drawableTop="@drawable/power"
+        android:text="@string/eight"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+</android.support.v7.widget.GridLayout>
