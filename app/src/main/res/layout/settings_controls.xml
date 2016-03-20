@@ -11,8 +11,7 @@
     <TextView
         android:id="@+id/stay_awake"
         style="@style/RemoteButton"
-        android:drawablePadding="3dp"
-        android:drawableTop="@drawable/arrow_down"
+        android:drawableTop="@drawable/sleep"
         android:text="@string/stay_awake"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -20,8 +19,7 @@
     <TextView
         android:id="@+id/speech"
         style="@style/RemoteButton"
-        android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/speech"
         android:text="@string/speech"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -29,8 +27,7 @@
     <TextView
         android:id="@+id/listening_settings"
         style="@style/RemoteButton"
-        android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/listeneing"
         android:text="@string/listening"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -38,8 +35,7 @@
     <TextView
         android:id="@+id/time_format"
         style="@style/RemoteButton"
-        android:drawablePadding="3dp"
-        android:drawableTop="@drawable/arrow_down"
+        android:drawableTop="@drawable/time"
         android:text="@string/time_format"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -48,8 +44,7 @@
     <TextView
         android:id="@+id/time_visible"
         style="@style/RemoteButton"
-        android:drawablePadding="3dp"
-        android:drawableTop="@drawable/arrow_down"
+        android:drawableTop="@drawable/binocular"
         android:text="@string/time_visible"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -57,8 +52,7 @@
     <TextView
         android:id="@+id/weather_format"
         style="@style/RemoteButton"
-        android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/fahrenheit"
         android:text="@string/weather_format"
         android:textSize="12sp"
         app:layout_columnWeight="1"
@@ -67,8 +61,7 @@
     <TextView
         android:id="@+id/weather_visible"
         style="@style/RemoteButton"
-        android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/binocular"
         android:text="@string/weather_visible"
         android:textSize="12sp"
         app:layout_columnWeight="1"

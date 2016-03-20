@@ -24,30 +24,28 @@
         <TextView
             android:id="@+id/scroll_up"
             android:text="@string/scroll_up"
-            android:drawableTop="@drawable/arrow_down"
+            android:drawableTop="@drawable/up"
             style="@style/RemoteButton"
             app:layout_columnWeight="1"
             app:layout_gravity="fill_horizontal" />
         <TextView
             android:id="@+id/go_back"
             android:text="@string/go_back"
-            android:drawableTop="@drawable/power"
-            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/back"
             style="@style/RemoteButton"
             app:layout_columnWeight="1"
             app:layout_gravity="fill_horizontal"/>
         <TextView
             android:id="@+id/go_forward"
             android:text="@string/go_forward"
-            android:drawableTop="@drawable/power"
-            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/forward"
             style="@style/RemoteButton"
             app:layout_columnWeight="1"
             app:layout_gravity="fill_horizontal" />
         <TextView
             android:id="@+id/power"
             android:text="@string/power"
-            android:drawableTop="@drawable/arrow_down"
+            android:drawableTop="@drawable/power"
             style="@style/RemoteButton"
             app:layout_columnWeight="1"
             app:layout_gravity="fill_horizontal" />
@@ -56,30 +54,28 @@
         <TextView
             android:id="@+id/scroll_down"
             android:text="@string/scroll_down"
-            android:drawableTop="@drawable/arrow_down"
+            android:drawableTop="@drawable/down"
             style="@style/RemoteButton"
             app:layout_columnWeight="1"
             app:layout_gravity="fill_horizontal" />
         <TextView
             android:id="@+id/increase_screen_size"
             android:text="@string/screen_size"
-            android:drawableTop="@drawable/power"
-            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/screen_size"
             style="@style/RemoteButton"
             app:layout_columnWeight="1"
             app:layout_gravity="fill_horizontal"/>
         <TextView
             android:id="@+id/listening"
             android:text="@string/listening"
-            android:drawableTop="@drawable/power"
-            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/listeneing"
             style="@style/RemoteButton"
             app:layout_columnWeight="1"
             app:layout_gravity="fill_horizontal" />
         <TextView
             android:id="@+id/help"
             android:text="@string/help"
-            android:drawableTop="@drawable/arrow_down"
+            android:drawableTop="@drawable/help"
             style="@style/RemoteButton"
             app:layout_columnWeight="1"
             app:layout_gravity="fill_horizontal" />
@@ -89,7 +85,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="10dp"
         android:background="#FFFFFF"/>
 
     <!-- context buttons - these change based on selected options menu / settings / etc -->

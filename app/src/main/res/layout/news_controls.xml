@@ -12,8 +12,7 @@
     <TextView
         android:id="@+id/business"
         style="@style/RemoteButton"
-        android:drawablePadding="3dp"
-        android:drawableTop="@drawable/arrow_down"
+        android:drawableTop="@drawable/news"
         android:text="@string/business"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -21,8 +20,7 @@
     <TextView
         android:id="@+id/media"
         style="@style/RemoteButton"
-        android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/news"
         android:text="@string/media"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -30,8 +28,7 @@
     <TextView
         android:id="@+id/science"
         style="@style/RemoteButton"
-        android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/news"
         android:text="@string/science"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -39,7 +36,7 @@
     <TextView
         android:id="@+id/sports"
         style="@style/RemoteButton"
-        android:drawableTop="@drawable/arrow_down"
+        android:drawableTop="@drawable/news"
         android:text="@string/sports"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -48,7 +45,7 @@
     <TextView
         android:id="@+id/technology"
         style="@style/RemoteButton"
-        android:drawableTop="@drawable/arrow_down"
+        android:drawableTop="@drawable/news"
         android:text="@string/technology"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -56,8 +53,7 @@
     <TextView
         android:id="@+id/travel"
         style="@style/RemoteButton"
-        android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/news"
         android:text="@string/travel"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -65,8 +61,7 @@
     <TextView
         android:id="@+id/world"
         style="@style/RemoteButton"
-        android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/news"
         android:text="@string/world"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
