@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- none of these are currently used, but keeping in case we need them
     <string-array name="fragment_commands">
         <item>Calendar</item>
         <item>Camera</item>
@@ -55,4 +56,6 @@
         <item>Eight</item>
         <item>Nine</item>
     </string-array>
+
+    -->
 </resources>

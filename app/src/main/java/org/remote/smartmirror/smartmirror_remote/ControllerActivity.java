@@ -5,54 +5,34 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 
 public class ControllerActivity extends AppCompatActivity {
 
     public static final String TAG = "Remote";
-
     public static final String SERVER_STARTED = "server started";
+
 
     private HashMap<String,NsdServiceInfo> mServiceMap;
     ArrayAdapter<String> peerAdapter;
 
     private FloatingActionButton fabShowPeers;
-    private ListView lstActionList;
-    private ListView lstPeerList;
-    private ListView lstGeneralList;
-    private LinearLayout layPeerLayout;
-    private LinearLayout layModuleLayout;
-    private List<String> mActionList;
-    private List<String> mGeneralList;
-    private Button btnSleep;
-    private Button btnWake;
 
     NsdHelper mNsdHelper;
     private Handler mUpdateHandler;
     RemoteConnection mRemoteConnection;
     final ArrayList<String> peerList = new ArrayList<>();
-
-    // TODO: import Constants from main application to ensure similar naming - consider grunt to keep synced?
-    private String[] screenSizes = { "close window", "small screen", "wide screen", "full screen"};
-    private int screenState = 0;
-    private String[] weatherVisibility = { "show weather", "hide weather" };
-    private int weatherState = 0;
 
     public class RemoteHandler extends Handler {
         @Override
@@ -66,8 +46,6 @@ public class ControllerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.controller_activity);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
 
         mServiceMap = new HashMap<>();
 
@@ -75,63 +53,23 @@ public class ControllerActivity extends AppCompatActivity {
         mUpdateHandler = new RemoteHandler();
         mRemoteConnection= new RemoteConnection(mUpdateHandler);
         mNsdHelper = new NsdHelper(this);
-        //registerNsdService();
-
 
         //txtConnectionMessage = (TextView) findViewById(R.id.connection_message);
-        mActionList = new ArrayList<>();
-        mActionList.addAll(Arrays.asList(getResources().getStringArray(R.array.fragment_commands)));
 
-        mGeneralList = new ArrayList<>();
-        mGeneralList.addAll(Arrays.asList(getResources().getStringArray(R.array.general_commands)));
-        mGeneralList.addAll(Arrays.asList(getResources().getStringArray(R.array.settings_commands)));
-        mGeneralList.addAll(Arrays.asList(getResources().getStringArray(R.array.numbers)));
+        // create a ContextControlsFragment using the MAIN_MENU layout
+        if (savedInstanceState == null) {
+            replaceFragment(ContextFragment.newInstance(ContextFragment.MAIN_MENU));
+        }
+
+
+        /*
+        //    KEEPING IN CASE WE WANT TO SEE THE PEER LIST OF ALL VISIBLE MIRRORS
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         layPeerLayout = (LinearLayout) findViewById(R.id.peer_layout);
-        layModuleLayout = (LinearLayout) findViewById(R.id.module_layout);
-
-
-        // set up sleep and wake buttons
-        btnSleep = (Button) findViewById(R.id.sleep_button);
-        btnWake = (Button) findViewById(R.id.wake_button);
-        btnSleep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendCommandToMirror(getResources().getString(R.string.sleep).toLowerCase());
-            }
-        });
-        btnWake.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendCommandToMirror(getResources().getString(R.string.wake).toLowerCase());
-            }
-        });
-
-        ArrayAdapter<String> generalAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, mGeneralList);
-        lstGeneralList = (ListView) findViewById(R.id.mirror_general_list);
-        lstGeneralList.setAdapter(generalAdapter);
-        lstGeneralList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String command = mGeneralList.get(position).toLowerCase();
-                sendCommandToMirror(command);
-            }
-        });
-
-        // initialize ActionList
-        ArrayAdapter<String> actionAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, mActionList);
-        lstActionList = (ListView) findViewById(R.id.mirror_fragment_list);
-        lstActionList.setAdapter(actionAdapter);
-        lstActionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String command = mActionList.get(position).toLowerCase();
-                sendCommandToMirror(command);
-            }
-        });
-
+        
         peerList.addAll(mServiceMap.keySet());
         peerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
                 peerList);
@@ -156,18 +94,79 @@ public class ControllerActivity extends AppCompatActivity {
                     showPeers();
             }
         });
+        */
     }
 
-    // show PeerList, hide Actions
-    public void showPeers() {
-        layPeerLayout.setVisibility(View.VISIBLE);
-        layModuleLayout.setVisibility(View.GONE);
+    private void replaceFragment(Fragment fragment){
+        getSupportFragmentManager().beginTransaction().add(R.id.context_controls, fragment).commit();
     }
 
-    // show Actions, hide PeerList
-    public void showModuleList() {
-        layPeerLayout.setVisibility(View.GONE);
-        layModuleLayout.setVisibility(View.VISIBLE);
+    public void onButtonClicked(View view){
+        String command = "";
+        switch (view.getId()) {
+            case R.id.calendar:
+                command = "calendar";
+                break;
+            case R.id.camera:
+                command = "camera";
+                break;
+            case R.id.facebook:
+                command = "facebook";
+                break;
+            case R.id.gallery:
+                command = "gallery";
+                break;
+            case R.id.gmail:
+                command = "gmail";
+                break;
+            case R.id.go_back:
+                command = "go back";
+                break;
+            case R.id.go_forward:
+                command = "go forward";
+                break;
+            case R.id.help:
+                command = "help";
+                break;
+            case R.id.increase_screen_size:
+                command = "increase screen size";
+                break;
+            case R.id.news:
+                command = "news";
+                break;
+            case R.id.night_light:
+                command = "night light";
+                break;
+            case R.id.photos:
+                command = "photos";
+                break;
+            case R.id.power:
+                command = "toggle wake";
+                break;
+            case R.id.quotes:
+                command = "quotes";
+                break;
+            case R.id.scroll_down:
+                command = "scroll down";
+                break;
+            case R.id.scroll_up:
+                command = "scroll up";
+                break;
+            case R.id.settings:
+                command = "settings";
+                break;
+            case R.id.toggle_listening:
+                command = "toggle listening";
+                break;
+            case R.id.twitter:
+                command = "twitter";
+                break;
+        }
+
+        if (!command.isEmpty()) {
+            Log.i(TAG, "sending command :: " + command);
+            sendCommandToMirror(command);
+        }
     }
 
     @Override
@@ -236,19 +235,8 @@ public class ControllerActivity extends AppCompatActivity {
 
     public void sendCommandToMirror(String command) {
         if (!command.isEmpty()) {
-            command = interpretCommand(command);
             mRemoteConnection.sendMessage(command);
         }
-    }
-
-    public String interpretCommand(String command) {
-        if (command.equals("screen size")) {
-            command = screenSizes[ ++screenState % screenSizes.length ];
-        } else if (command.equals("show weather")) {
-            command = weatherVisibility[ ++weatherState % weatherVisibility.length ];
-        }
-
-        return command;
     }
 
     public void serviceDiscovered(NsdServiceInfo service){
@@ -258,6 +246,7 @@ public class ControllerActivity extends AppCompatActivity {
         peerList.add(name);
         //ArrayAdapter<String> adapter = (ArrayAdapter<String>)lstPeerList.getAdapter();
 
+        /* Taken out while FAB is removed. Normally would show list of discovered mirrors in the area.
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -265,6 +254,7 @@ public class ControllerActivity extends AppCompatActivity {
                 Log.d(TAG, "Adding service :: " + peerAdapter.toString());
             }
         });
+        */
     }
 
     public void serviceLost(NsdServiceInfo service) {

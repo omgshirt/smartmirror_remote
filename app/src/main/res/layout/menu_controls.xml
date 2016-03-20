@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/default_buttons"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:columnCount="4"
+        app:rowCount="3"
+        tools:showIn="@layout/content_main">
+
+        <!-- row 1 -->
+        <TextView
+            android:id="@+id/calendar"
+            style="@style/RemoteButton"
+            android:drawableTop="@drawable/arrow_down"
+            android:text="@string/calendar"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal" />
+
+        <TextView
+            android:id="@+id/camera"
+            style="@style/RemoteButton"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/power"
+            android:text="@string/camera"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal" />
+
+        <TextView
+            android:id="@+id/facebook"
+            style="@style/RemoteButton"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/power"
+            android:text="@string/facebook"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal" />
+
+        <TextView
+            android:id="@+id/gallery"
+            style="@style/RemoteButton"
+            android:drawableTop="@drawable/arrow_down"
+            android:text="@string/gallery"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal" />
+
+        <!-- row 2 -->
+        <TextView
+            android:id="@+id/gmail"
+            style="@style/RemoteButton"
+            android:drawableTop="@drawable/arrow_down"
+            android:text="@string/gmail"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal" />
+
+        <TextView
+            android:id="@+id/news"
+            style="@style/RemoteButton"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/power"
+            android:text="@string/news"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal" />
+
+        <TextView
+            android:id="@+id/night_light"
+            style="@style/RemoteButton"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/power"
+            android:text="@string/night_light"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal" />
+
+        <TextView
+            android:id="@+id/photos"
+            style="@style/RemoteButton"
+            android:drawableTop="@drawable/arrow_down"
+            android:text="@string/photos"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal" />
+
+        <!-- row 3 -->
+        <TextView
+            android:id="@+id/quotes"
+            style="@style/RemoteButton"
+            android:drawableTop="@drawable/arrow_down"
+            android:text="@string/quotes"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal" />
+
+        <TextView
+            android:id="@+id/settings"
+            style="@style/RemoteButton"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/power"
+            android:text="@string/settings"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal" />
+
+        <TextView
+            android:id="@+id/twitter"
+            style="@style/RemoteButton"
+            android:drawablePadding="3dp"
+            android:drawableTop="@drawable/power"
+            android:text="@string/twitter"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill_horizontal" />
+
+    </android.support.v7.widget.GridLayout>
+</FrameLayout>
