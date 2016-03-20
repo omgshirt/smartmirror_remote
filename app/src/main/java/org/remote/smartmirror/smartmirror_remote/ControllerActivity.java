@@ -130,6 +130,10 @@ public class ControllerActivity extends AppCompatActivity {
 
         // change context views and send commands to mirror
         switch (view.getId()) {
+            case R.id.go_back:
+                onBackPressed();
+                command = "go back";
+                break;
             case R.id.camera:
                 replaceFragment(ContextFragment.newInstance(ContextFragment.CAMERA_CONTROLS));
                 command = "camera";
@@ -141,6 +145,9 @@ public class ControllerActivity extends AppCompatActivity {
             case R.id.increase_screen_size:
                 command = "increase screen size";
                 break;
+            case R.id.listening:
+                command = "toggle listening";
+                break;
             case R.id.news:
                 replaceFragment(ContextFragment.newInstance(ContextFragment.NEWS_CONTROLS));
                 break;
@@ -151,8 +158,14 @@ public class ControllerActivity extends AppCompatActivity {
                 command = "settings";
                 replaceFragment(ContextFragment.newInstance(ContextFragment.SETTINGS_CONTROLS));
                 break;
-            case R.id.toggle_listening:
-                command = "toggle listening";
+            case R.id.speech:
+                command = "toggle speech";
+                break;
+            case R.id.time_format:
+                command = "toggle time format";
+                break;
+            case R.id.weather_format:
+                command = "toggle weather format";
                 break;
             default:
                 command = ((TextView)view).getText().toString().toLowerCase(Locale.US);

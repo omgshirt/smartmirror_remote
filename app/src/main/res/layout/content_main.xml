@@ -16,6 +16,7 @@
         android:id="@+id/default_controls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
         app:columnCount="4"
         app:rowCount="2">
 
@@ -68,7 +69,7 @@
             app:layout_columnWeight="1"
             app:layout_gravity="fill_horizontal"/>
         <TextView
-            android:id="@+id/toggle_listening"
+            android:id="@+id/listening"
             android:text="@string/listening"
             android:drawableTop="@drawable/power"
             android:drawablePadding="3dp"
