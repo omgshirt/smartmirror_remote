@@ -146,6 +146,7 @@ public class ControllerActivity extends AppCompatActivity {
                 command = "increase screen size";
                 break;
             case R.id.listening:
+            case R.id.listening_settings:
                 command = "toggle listening";
                 break;
             case R.id.news:
@@ -166,6 +167,9 @@ public class ControllerActivity extends AppCompatActivity {
                 break;
             case R.id.weather_format:
                 command = "toggle weather format";
+                break;
+            case R.id.weather_visible:
+                command = "toggle weather visibility";
                 break;
             default:
                 command = ((TextView)view).getText().toString().toLowerCase(Locale.US);
