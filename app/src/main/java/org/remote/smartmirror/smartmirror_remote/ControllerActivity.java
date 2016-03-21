@@ -1,7 +1,5 @@
 package org.remote.smartmirror.smartmirror_remote;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -110,6 +108,11 @@ public class ControllerActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    /**
+     * Called from buttons via XML. See 'styles.xml'. Commands are interpreted here, by changing
+     * the remotes layout, broadcasting a command to the mirror, or both.
+     * @param view clicked view
+     */
     public void onButtonClicked(View view){
         String command = "";
 
@@ -181,9 +184,13 @@ public class ControllerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        // ignore back presses if it would remove first entry
+
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            // ignore back press if it would remove first entry
             super.onBackPressed();
+        } else {
+            // instead, close the app
+            finish();
         }
     }
 

@@ -23,9 +23,9 @@
     <style name="RemoteButton">
         <item name="android:textSize">14sp</item>
         <item name="android:gravity">center</item>
-        <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingBottom">6dp</item>
-        <item name="android:drawablePadding">6dp</item>
+        <item name="android:scaleX">0.8</item>
+        <item name="android:scaleY">0.8</item>
+        <item name="android:drawablePadding">5dp</item>
         <item name="android:onClick">onButtonClicked</item>
     </style>
 
