@@ -23,8 +23,6 @@ import java.util.Locale;
 public class ControllerActivity extends AppCompatActivity {
 
     public static final String TAG = "Remote";
-    public static final String SERVER_STARTED = "server started";
-
 
     private HashMap<String,NsdServiceInfo> mServiceMap;
     ArrayAdapter<String> peerAdapter;
@@ -134,7 +132,7 @@ public class ControllerActivity extends AppCompatActivity {
         // change context views and send commands to mirror
         switch (view.getId()) {
             case R.id.go_back:
-                onBackPressed();
+                goBackPressed();
                 command = "go back";
                 break;
             case R.id.camera:
@@ -179,6 +177,14 @@ public class ControllerActivity extends AppCompatActivity {
         if (!command.isEmpty()) {
             Log.i(TAG, "sending command :: " + command);
             sendCommandToMirror(command);
+        }
+    }
+
+    // called by pressing the 'go back' button on the UI. Triggers the back stack to pop unless
+    // at the top-level menu.
+    private void goBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            onBackPressed();
         }
     }
 
