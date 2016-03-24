@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/default_controls"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,7 +11,6 @@
     <TextView
         android:id="@+id/calendar"
         style="@style/RemoteButton"
-        
         android:drawableTop="@drawable/calendar"
         android:text="@string/calendar"
         app:layout_columnWeight="1"
@@ -60,14 +58,20 @@
         style="@style/RemoteButton"
         android:drawableTop="@drawable/email"
         android:text="@string/gmail"
-        
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/music"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/music"
+        android:text="@string/music"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
 
     <TextView
         android:id="@+id/news"
         style="@style/RemoteButton"
-        
         android:drawableTop="@drawable/news"
         android:text="@string/news"
         app:layout_columnWeight="1"
@@ -76,7 +80,6 @@
     <TextView
         android:id="@+id/night_light"
         style="@style/RemoteButton"
-        
         android:drawableTop="@drawable/light"
         android:text="@string/night_light"
         app:layout_columnWeight="1"

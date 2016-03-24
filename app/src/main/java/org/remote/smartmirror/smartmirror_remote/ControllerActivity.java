@@ -27,6 +27,8 @@ public class ControllerActivity extends AppCompatActivity {
     private HashMap<String,NsdServiceInfo> mServiceMap;
     ArrayAdapter<String> peerAdapter;
 
+    private HashMap<Integer, String> mGenreMap;
+
     private FloatingActionButton fabShowPeers;
 
     NsdHelper mNsdHelper;
@@ -58,9 +60,17 @@ public class ControllerActivity extends AppCompatActivity {
 
         // create a ContextControlsFragment using the DEFAULT_CONTROLS layout
         if (savedInstanceState == null) {
-            replaceFragment(ContextFragment.newInstance(ContextFragment.DEFAULT_CONTROLS));
+            replaceFragment(ContextFragment.NewInstance(R.layout.default_controls));
         }
 
+        mGenreMap = new HashMap<>();
+        mGenreMap.put(R.id.alternative, "play alternative");
+        mGenreMap.put(R.id.ambient, "play ambient");
+        mGenreMap.put(R.id.classical, "play classical");
+        mGenreMap.put(R.id.dance, "play dance");
+        mGenreMap.put(R.id.jazz, "play jazz");
+        mGenreMap.put(R.id.rap, "play rap");
+        mGenreMap.put(R.id.rock, "play rock");
 
         /*
         //    KEEPING IN CASE WE WANT TO SEE THE PEER LIST OF ALL VISIBLE MIRRORS
@@ -78,7 +88,6 @@ public class ControllerActivity extends AppCompatActivity {
         lstPeerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // TODO: connect to selected item
                 Log.d(TAG, "connecting to :: " + peerList.get(position));
             }
         });
@@ -123,7 +132,7 @@ public class ControllerActivity extends AppCompatActivity {
             case R.id.technology:
             case R.id.travel:
             case R.id.world:
-                replaceFragment(ContextFragment.newInstance(ContextFragment.ARTICLE_CONTROLS));
+                replaceFragment(ContextFragment.NewInstance(R.layout.article_controls));
                 break;
             default:
                 break;
@@ -136,11 +145,11 @@ public class ControllerActivity extends AppCompatActivity {
                 command = "go back";
                 break;
             case R.id.camera:
-                replaceFragment(ContextFragment.newInstance(ContextFragment.CAMERA_CONTROLS));
+                replaceFragment(ContextFragment.NewInstance(R.layout.camera_controls));
                 command = "camera";
                 break;
             case R.id.gmail:
-                replaceFragment(ContextFragment.newInstance(ContextFragment.GMAIL_CONTROLS));
+                replaceFragment(ContextFragment.NewInstance(R.layout.gmail_controls));
                 command = "gmail";
                 break;
             case R.id.increase_screen_size:
@@ -150,18 +159,22 @@ public class ControllerActivity extends AppCompatActivity {
             case R.id.listening_settings:
                 command = "toggle listening";
                 break;
+            case R.id.music:
+                command = "music";
+                replaceFragment(ContextFragment.NewInstance(R.layout.music_controls));
+                break;
             case R.id.news:
-                replaceFragment(ContextFragment.newInstance(ContextFragment.NEWS_CONTROLS));
+                replaceFragment(ContextFragment.NewInstance(R.layout.news_controls));
                 break;
             case R.id.power:
                 command = "toggle wake";
                 break;
             case R.id.settings:
                 command = "settings";
-                replaceFragment(ContextFragment.newInstance(ContextFragment.SETTINGS_CONTROLS));
+                replaceFragment(ContextFragment.NewInstance(R.layout.settings_controls));
                 break;
-            case R.id.speech:
-                command = "toggle speech";
+            case R.id.sound:
+                command = "toggle sound";
                 break;
             case R.id.time_format:
                 command = "toggle time format";
@@ -172,6 +185,11 @@ public class ControllerActivity extends AppCompatActivity {
             default:
                 command = ((TextView)view).getText().toString().toLowerCase(Locale.US);
                 break;
+        }
+
+        // if the clicked view is one of the music genres, send the corresponding play command.
+        if (mGenreMap.containsKey(view.getId())) {
+            command = mGenreMap.get(view.getId());
         }
 
         if (!command.isEmpty()) {

@@ -1,69 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/settings_controls"
+    android:id="@+id/music_controls"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:columnCount="4"
     app:rowCount="3">
-
-    <!-- row 1 -->
     <TextView
-        android:id="@+id/stay_awake"
+        android:id="@+id/alternative"
         style="@style/RemoteButton"
-        android:drawableTop="@drawable/sleep"
-        android:text="@string/stay_awake"
+        android:drawableTop="@drawable/music"
+        android:text="@string/alternative"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
-
     <TextView
-        android:id="@+id/sound"
+        android:id="@+id/ambient"
         style="@style/RemoteButton"
-        android:drawableTop="@drawable/speech"
-        android:text="@string/sound"
+        android:drawableTop="@drawable/music"
+        android:text="@string/ambient"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
-
     <TextView
-        android:id="@+id/listening_settings"
+        android:id="@+id/classical"
         style="@style/RemoteButton"
-        android:drawableTop="@drawable/listeneing"
-        android:text="@string/listening"
+        android:drawableTop="@drawable/music"
+        android:text="@string/classical"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
-
     <TextView
-        android:id="@+id/time_format"
+        android:id="@+id/dance"
         style="@style/RemoteButton"
-        android:drawableTop="@drawable/time"
-        android:text="@string/time_format"
+        android:drawableTop="@drawable/music"
+        android:text="@string/dance"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
-
-    <!-- row 2 -->
     <TextView
-        android:id="@+id/time_visible"
+        android:id="@+id/jazz"
         style="@style/RemoteButton"
-        android:drawableTop="@drawable/binocular"
-        android:text="@string/time_visible"
+        android:drawableTop="@drawable/music"
+        android:text="@string/jazz"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
-
     <TextView
-        android:id="@+id/weather_format"
+        android:id="@+id/rap"
         style="@style/RemoteButton"
-        android:drawableTop="@drawable/fahrenheit"
-        android:text="@string/weather_format"
-        android:textSize="12sp"
+        android:drawableTop="@drawable/music"
+        android:text="@string/rap"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
-
     <TextView
-        android:id="@+id/weather_visible"
+        android:id="@+id/rock"
         style="@style/RemoteButton"
-        android:drawableTop="@drawable/binocular"
-        android:text="@string/weather_visible"
-        android:textSize="12sp"
+        android:drawableTop="@drawable/music"
+        android:text="@string/rock"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
 
