@@ -65,6 +65,11 @@
     <string name="rap">Rap</string>
     <string name="rock">Rock</string>
 
+    <!-- play controls -->
+    <string name="pause">Pause</string>
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
+
     <!-- menu /fragment names -->
     <string name="calendar">Calendar</string>
     <string name="camera">Camera</string>

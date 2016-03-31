@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/play_controls"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:columnCount="4"
+    app:rowCount="3"
+    tools:showIn="@layout/content_main">
+
+    <TextView
+        android:id="@+id/stop"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/stop"
+        android:text="@string/stop"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+    <TextView
+        android:id="@+id/play"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/play"
+        android:text="@string/play"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+    <TextView
+        android:id="@+id/pause"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/pause"
+        android:text="@string/pause"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal" />
+</android.support.v7.widget.GridLayout>

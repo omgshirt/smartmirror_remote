@@ -63,14 +63,15 @@ public class ControllerActivity extends AppCompatActivity {
             replaceFragment(ContextFragment.NewInstance(R.layout.default_controls));
         }
 
+        //
         mGenreMap = new HashMap<>();
-        mGenreMap.put(R.id.alternative, "play alternative");
-        mGenreMap.put(R.id.ambient, "play ambient");
-        mGenreMap.put(R.id.classical, "play classical");
-        mGenreMap.put(R.id.dance, "play dance");
-        mGenreMap.put(R.id.jazz, "play jazz");
-        mGenreMap.put(R.id.rap, "play rap");
-        mGenreMap.put(R.id.rock, "play rock");
+        mGenreMap.put(R.id.alternative, "remote play alternative");
+        mGenreMap.put(R.id.ambient, "remote play ambient");
+        mGenreMap.put(R.id.classical, "remote play classical");
+        mGenreMap.put(R.id.dance, "remote play dance");
+        mGenreMap.put(R.id.jazz, "remote play jazz");
+        mGenreMap.put(R.id.rap, "remote play rap");
+        mGenreMap.put(R.id.rock, "remote play rock");
 
         /*
         //    KEEPING IN CASE WE WANT TO SEE THE PEER LIST OF ALL VISIBLE MIRRORS
@@ -166,6 +167,12 @@ public class ControllerActivity extends AppCompatActivity {
             case R.id.news:
                 replaceFragment(ContextFragment.NewInstance(R.layout.news_controls));
                 break;
+            case R.id.pause:
+                command = "pause music";
+                break;
+            case R.id.play:
+                command = "play music";
+                break;
             case R.id.power:
                 command = "toggle wake";
                 break;
@@ -175,6 +182,10 @@ public class ControllerActivity extends AppCompatActivity {
                 break;
             case R.id.sound:
                 command = "toggle sound";
+                break;
+            case R.id.stop:
+                command = "stop music";
+                replaceFragment(ContextFragment.NewInstance(R.layout.music_controls));
                 break;
             case R.id.time_format:
                 command = "toggle time format";
@@ -188,8 +199,10 @@ public class ControllerActivity extends AppCompatActivity {
         }
 
         // if the clicked view is one of the music genres, send the corresponding play command.
+        // Then, switch view to play_controls
         if (mGenreMap.containsKey(view.getId())) {
             command = mGenreMap.get(view.getId());
+            replaceFragment(ContextFragment.NewInstance(R.layout.play_controls));
         }
 
         if (!command.isEmpty()) {
