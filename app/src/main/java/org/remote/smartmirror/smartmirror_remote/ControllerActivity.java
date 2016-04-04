@@ -126,8 +126,16 @@ public class ControllerActivity extends AppCompatActivity {
 
         // Change to article selection if a news desk is chosen
         switch (view.getId()) {
+            case R.id.books:
             case R.id.business:
+            case R.id.economics:
+            case R.id.environment:
+            case R.id.fashion:
+            case R.id.games:
+            case R.id.lifestyle:
             case R.id.media:
+            case R.id.movies:
+            case R.id.opinion:
             case R.id.science:
             case R.id.sports:
             case R.id.technology:

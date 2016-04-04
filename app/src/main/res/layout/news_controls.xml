@@ -10,12 +10,65 @@
     tools:showIn="@layout/content_main">
     <!-- row 1 -->
     <TextView
-        android:id="@+id/business"
+        android:id="@+id/books"
+        android:text="@string/books"
         style="@style/RemoteButton"
         android:drawableTop="@drawable/news"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal"
+        />
+    <TextView
+        android:id="@+id/business"
         android:text="@string/business"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/news"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
+
+    <TextView
+        android:id="@+id/economics"
+        android:text="@string/economics"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/news"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal"
+        />
+
+    <TextView
+        android:id="@+id/environment"
+        android:text="@string/environment"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/news"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal"
+        />
+
+    <TextView
+        android:id="@+id/fashion"
+        android:text="@string/fashion"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/news"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal"
+        />
+
+    <TextView
+        android:id="@+id/games"
+        android:text="@string/games"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/news"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal"
+        />
+
+    <TextView
+        android:id="@+id/lifestyle"
+        android:text="@string/lifestyle"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/news"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal"
+        />
 
     <TextView
         android:id="@+id/media"
@@ -26,43 +79,61 @@
         app:layout_gravity="fill_horizontal" />
 
     <TextView
-        android:id="@+id/science"
+        android:id="@+id/movies"
+        android:text="@string/movies"
         style="@style/RemoteButton"
         android:drawableTop="@drawable/news"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal"
+        />
+
+    <TextView
+        android:id="@+id/opinion"
+        android:text="@string/opinion"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/news"
+        app:layout_columnWeight="1"
+        app:layout_gravity="fill_horizontal"
+        />
+
+    <TextView
+        android:id="@+id/science"
         android:text="@string/science"
+        style="@style/RemoteButton"
+        android:drawableTop="@drawable/news"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
 
     <TextView
         android:id="@+id/sports"
+        android:text="@string/sports"
         style="@style/RemoteButton"
         android:drawableTop="@drawable/news"
-        android:text="@string/sports"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
 
     <!-- row 2 -->
     <TextView
         android:id="@+id/technology"
+        android:text="@string/technology"
         style="@style/RemoteButton"
         android:drawableTop="@drawable/news"
-        android:text="@string/technology"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
 
     <TextView
         android:id="@+id/travel"
+        android:text="@string/travel"
         style="@style/RemoteButton"
         android:drawableTop="@drawable/news"
-        android:text="@string/travel"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
 
     <TextView
         android:id="@+id/world"
+        android:text="@string/world"
         style="@style/RemoteButton"
         android:drawableTop="@drawable/news"
-        android:text="@string/world"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
 

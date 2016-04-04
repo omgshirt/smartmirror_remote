@@ -29,8 +29,16 @@
     <string name="weather_visible">Weather Visible</string>
 
     <!-- news -->
+    <string name="books">Books</string>
     <string name="business">Business</string>
+    <string name="economics">Economics</string>
+    <string name="environment">Environment</string>
+    <string name="fashion">Fashion</string>
+    <string name="games">Games</string>
+    <string name="lifestyle">Lifestyle</string>
     <string name="media">Media</string>
+    <string name="movies">Movies</string>
+    <string name="opinion">Opinion</string>
     <string name="science">Science</string>
     <string name="sports">Sports</string>
     <string name="technology">Technology</string>

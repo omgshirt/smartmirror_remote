@@ -14,7 +14,7 @@
         android:id="@+id/one"
         style="@style/RemoteButton"
         android:drawablePadding="3dp"
-        android:drawableTop="@drawable/arrow_down"
+        android:drawableTop="@drawable/news"
         android:text="@string/one"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -23,7 +23,7 @@
         android:id="@+id/two"
         style="@style/RemoteButton"
         android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/news"
         android:text="@string/two"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -32,7 +32,7 @@
         android:id="@+id/three"
         style="@style/RemoteButton"
         android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/news"
         android:text="@string/three"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -40,7 +40,7 @@
     <TextView
         android:id="@+id/four"
         style="@style/RemoteButton"
-        android:drawableTop="@drawable/arrow_down"
+        android:drawableTop="@drawable/news"
         android:text="@string/four"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -49,7 +49,7 @@
     <TextView
         android:id="@+id/five"
         style="@style/RemoteButton"
-        android:drawableTop="@drawable/arrow_down"
+        android:drawableTop="@drawable/news"
         android:text="@string/five"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -58,7 +58,7 @@
         android:id="@+id/six"
         style="@style/RemoteButton"
         android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/news"
         android:text="@string/six"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -67,7 +67,7 @@
         android:id="@+id/seven"
         style="@style/RemoteButton"
         android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/news"
         android:text="@string/seven"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -76,7 +76,7 @@
         android:id="@+id/eight"
         style="@style/RemoteButton"
         android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/news"
         android:text="@string/eight"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -85,7 +85,7 @@
         android:id="@+id/nine"
         style="@style/RemoteButton"
         android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/news"
         android:text="@string/nine"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
@@ -94,7 +94,7 @@
         android:id="@+id/ten"
         style="@style/RemoteButton"
         android:drawablePadding="3dp"
-        android:drawableTop="@drawable/power"
+        android:drawableTop="@drawable/news"
         android:text="@string/ten"
         app:layout_columnWeight="1"
         app:layout_gravity="fill_horizontal" />
